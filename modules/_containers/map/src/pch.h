@@ -1,0 +1,18 @@
+#pragma once
+
+//////////////////////////////////////////////////////////////////////////
+// STL includes and definitions.
+//
+
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <map>
+#include <numeric>
+#include <sstream>
+
+//////////////////////////////////////////////////////////////////////////
+// logger includes and definitions
+//
+
+#include "Logger.hpp"
