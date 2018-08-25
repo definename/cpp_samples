@@ -1,4 +1,4 @@
-project(cpp17_console)
+project(struct_bindings)
 
 set(PROJECT_HEADERS
 	)
@@ -32,8 +32,7 @@ add_executable(${PROJECT_NAME}
 	
 target_link_libraries(${PROJECT_NAME}
 	PRIVATE
-		${CPP17_Libraries}
-		${LOGGER_Libraries}
+		${Logger_Libraries}
 		)
 	
 # add_dependencies(${PROJECT_NAME}
