@@ -1,4 +1,4 @@
-project(operations)
+project(bin2decimal)
 
 set(PROJECT_SOURCES
 	src/main.cpp

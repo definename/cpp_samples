@@ -1,8 +1,5 @@
 project(header)
 
-include(PCHSupport)
-include(CRTLinkage)
-
 set(PROJECT_SOURCES
 	src/main.cpp
 	)
@@ -33,5 +30,5 @@ add_definitions(
 	-D_UNICODE
 	)
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "_bits")
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROPERTY_FOLDER})
 #set_target_properties(${PROJECT_NAME} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)
