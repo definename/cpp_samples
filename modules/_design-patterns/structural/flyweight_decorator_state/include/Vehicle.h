@@ -7,7 +7,7 @@ public:
 		: speed_(10)
 	{
 	}
-	~IVehicle() = default;
+	virtual ~IVehicle() = default;
 
 	virtual int GetSpeed() = 0;
 
@@ -18,5 +18,5 @@ protected:
 class Vehicle : public IVehicle
 {
 public:
-	virtual int GetSpeed() override;
+	int GetSpeed() override;
 };

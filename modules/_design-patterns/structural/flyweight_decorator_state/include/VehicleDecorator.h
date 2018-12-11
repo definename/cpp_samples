@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	~IVehicleDecorator() = default;
+	virtual ~IVehicleDecorator() = default;
 
 protected:
 	IVehicle* vehicle_;
@@ -24,7 +24,7 @@ public:
 	~VehicleDecoratorFast() = default;
 
 public:
-	virtual int GetSpeed() override;
+	int GetSpeed() override;
 
 private:
 	int diff_;
@@ -37,7 +37,7 @@ public:
 	~VehicleDecoratorSlow() = default;
 
 public:
-	virtual int GetSpeed() override;
+	int GetSpeed() override;
 
 private:
 	int diff_;

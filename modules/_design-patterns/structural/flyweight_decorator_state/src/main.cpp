@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
 	// Flyweight pattern
 	auto factory = TrafficLightsFactory();
-	factory.CreateTrafficLight(2, 2);
+	factory.CreateTrafficLight(2, 3);
 	for (;;)
 	{
 		factory.Tick();

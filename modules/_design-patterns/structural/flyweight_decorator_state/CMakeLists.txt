@@ -1,10 +1,11 @@
-project(flyweight_decorator)
+project(flyweight_decorator_state)
 
 set(PROJECT_HEADERS
 	include/City.h
 	include/Roads.h
 	include/TrafficLightsFactory.h
 	include/TrafficLight.h
+	include/TrafficLightState.h
 	include/VehicleDecorator.h
 	include/Vehicle.h
 	)
@@ -14,6 +15,7 @@ set(PROJECT_SOURCES
 	src/Roads.cpp
 	src/TrafficLightsFactory.cpp
 	src/TrafficLight.cpp
+	src/TrafficLightState.cpp
 	src/Vehicle.cpp
 	src/VehicleDecorator.cpp
 	)
