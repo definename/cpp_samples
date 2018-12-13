@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	std::cout << "Normal speed:" << vehicle->GetSpeed() << std::endl;
 	IVehicleDecorator* vehicleFast = new VehicleDecoratorFast(vehicle, 10);
 	std::cout << "Fast speed:" << vehicleFast->GetSpeed() << std::endl;
-	IVehicleDecorator* vehicleSlow = new VehicleDecoratorSlow(vehicle, 2);
+	IVehicleDecorator* vehicleSlow = new VehicleDecoratorSlow(vehicleFast, 2);
 	std::cout << "Slow speed:" << vehicleSlow->GetSpeed() << std::endl;
 
 	// Flyweight pattern
