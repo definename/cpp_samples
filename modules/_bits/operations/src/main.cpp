@@ -7,10 +7,20 @@ void Bits(TType value);
 // Determine byte order.
 void ByteOrder();
 
+#define bit_mast8(x) (0x01 << (x))
+
+enum UnknownType
+{
+	UNKNOWN = 1
+};
+
+#define UNKNOWN bit_mast8(UnknownType::UNKNOWN)
+
 
 int _tmain(int argc, TCHAR* argv[])
 {
 	logger::InitializeLog("console");
+	logger::log->info("{}", UNKNOWN);
 
 	ByteOrder();
 	logger::log->info("");
