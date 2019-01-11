@@ -10,36 +10,41 @@ void ByteOrder();
 
 int _tmain(int argc, TCHAR* argv[])
 {
-	ByteOrder();
+	logger::InitializeLog("console");
 
-	type number1 = std::numeric_limits<type>::max();;
+	ByteOrder();
+	logger::log->info("");
+
+	type number1 = std::numeric_limits<type>::max();
 	type number2 = 1;
 	{
 		Bits<type>(number1);
 		Bits<type>(number2);
 		Bits<type>(number1 & number2);
-		_tcout << std::endl;
+		logger::log->info("");
 	}
 
 	{
 		Bits<type>(number1);
 		Bits<type>(number2);
 		Bits<type>(number1 | number2);
-		_tcout << std::endl;
+		logger::log->info("");
 	}
 
 	{
 		Bits<type>(number1);
 		Bits<type>(number2);
 		Bits<type>(number1 ^ number2);
-		_tcout << std::endl;
+		logger::log->info("");
 	}
 
 	{
 		Bits<type>(number1);
 		Bits<type>(~number1);
-		_tcout << std::endl;
+		logger::log->info("");
 	}
+
+	logger::UninitializeLog();
 
 	return EXIT_SUCCESS;
 }
@@ -50,14 +55,15 @@ void Bits(TType value)
 	const TType SHIFT = 8 * sizeof(TType) - 1;
 	const TType MASK = TType(1) << SHIFT;
 
+	std::ostringstream res;
 	for (TType i = 1; i <= SHIFT + 1; ++i)
 	{
-		_tcout << (value & MASK ? '1' : '0');
+		res << (value & MASK ? '1' : '0');
 		value = value << 1;
 		if (i % 8 == 0)
-			_tcout << ' ';
+			res << ' ';
 	}
-	_tcout << std::endl;
+	logger::log->info(res.str());
 }
 
 void ByteOrder()
@@ -67,9 +73,10 @@ void ByteOrder()
 	unsigned char y = *(reinterpret_cast<unsigned char*>(&x));
 	Bits<unsigned char>(y);
 
-	if (x == 0)
-		_tcout << _T("big-endian");
-	else if (x == 1)
-		_tcout << _T("little-endian");
-	_tcout << std::endl;
+	if (x == 0) {
+		logger::log->info("big-endian");
+	}
+	else if (x == 1) {
+		logger::log->info("little-endian");
+	}
 }

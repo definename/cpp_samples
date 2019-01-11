@@ -20,15 +20,18 @@ source_group("Source Files" FILES ${PROJECT_SOURCES})
 source_group("Header Files" FILES ${PROJECT_HEADERS})
 source_group("" FILES ${MISC})
 
-add_precompiled_headers(${PROJECT_NAME} "src/")
-
-include_directories(
-	include
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		include
+	)
+target_link_libraries(${PROJECT_NAME}
+	${Logger_Libraries}
 	)
 add_definitions(
 	-DUNICODE
 	-D_UNICODE
 	)
 
+add_precompiled_headers(${PROJECT_NAME} "src/")
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROPERTY_FOLDER})
 #set_target_properties(${PROJECT_NAME} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)
