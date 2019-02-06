@@ -4,57 +4,60 @@
 // Design and develop stack container to find minimum value for const time.
 //
 
-namespace emulator
+namespace Emulator
 {
 
 template<typename T>
-class stack
+class Stack
 {
+	template<typename T>
+	friend void Printer(Stack<T>);
+
 public:
 	void push(const T& value) {
-		stack_.emplace(value, stack_.empty() ? value : std::min(value, stack_.top().second));
+		data_.emplace(value, data_.empty() ? value : std::min(value, data_.top().second));
 	}
 
 	T& top() {
-		return stack_.top().first;
+		return data_.top().first;
 	}
 
 	T& min() {
-		return stack_.top().second;
+		return data_.top().second;
 	}
 
 	void pop() {
-		stack_.pop();
+		data_.pop();
 	}
 
 	bool empty() const {
-		return stack_.empty();
+		return data_.empty();
 	}
-
-	void clear()
-	{
-		while (!stack_.empty())
-		{
-			const auto& temp = stack_.top();
-			logger::log->info("{} : {}", temp.first, temp.second);
-			stack_.pop();
-		}
-	}
-
 
 private:
-	std::stack<std::pair<T, T>> stack_;
+	std::stack<std::pair<T, T>> data_;
 };
 
+template<typename T>
+void Printer(Stack<T> coll)
+{
+	while (!coll.data_.empty())
+	{
+		const auto& temp = coll.data_.top();
+		logger::log->info("{} : {}", temp.first, temp.second);
+		coll.data_.pop();
+	}
 }
+
+} // namespace Emulator
 
 int main()
 {
 	logger::InitializeLog("console");
 
-	emulator::stack<int> coll;
+	Emulator::Stack<int> coll;
 	for (int i = 0; i <= 10; ++i) {
-		coll.push(i); 
+		coll.push(i);
 	}
 
 	if (!coll.empty())
@@ -62,7 +65,8 @@ int main()
 		logger::log->info("Minimum value in stack: {}", coll.min());
 		logger::log->info("Top value in stack: {}", coll.top());
 	}
-	coll.clear();
+
+	Emulator::Printer<int>(coll);
 
 	logger::UninitializeLog();
 
