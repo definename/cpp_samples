@@ -1,4 +1,4 @@
-project(vector)
+project(stack)
 
 set(PROJECT_HEADERS
 	)
