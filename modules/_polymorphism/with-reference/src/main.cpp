@@ -6,14 +6,14 @@ public:
 	virtual ~Pet() = default;
 
 public:
-	virtual void Noice() = 0;
+	virtual void Noise() = 0;
 };
 
 class Dog :public Pet {
 public:
 	Dog() = default;
 	~Dog() = default;
-	void Noice() override {
+	void Noise() override {
 		std::cout << "Growl" << std::endl;
 	}
 };
@@ -24,7 +24,7 @@ public:
 	~Cat() = default;
 
 public:
-	void Noice() override {
+	void Noise() override {
 		std::cout << "Mew" << std::endl;
 	}
 };
@@ -39,10 +39,10 @@ void main(int argc, char* argv[])
 		{
 			Pet* ppet = new Dog;
 			Pet& pet = *ppet;
-			pet.Noice();
+			pet.Noise();
 
 			auto testNoise = [](Pet& pet) {
-				pet.Noice();
+				pet.Noise();
 			};
 			testNoise(*ppet);
 		}
