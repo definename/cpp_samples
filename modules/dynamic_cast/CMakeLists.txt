@@ -1,4 +1,4 @@
-project(rtti)
+project(dynamic_cast)
 
 set(PROJECT_SOURCES
 	src/main.cpp

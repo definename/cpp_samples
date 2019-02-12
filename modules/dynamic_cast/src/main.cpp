@@ -14,6 +14,7 @@ public:
 		std::cout << "Dog" << std::endl;
 	}
 };
+
 class Cat : public Pet {
 public:
 	Cat() = default;
@@ -71,7 +72,6 @@ int main(int argc, char* argv[])
 		// The same.
 		Pet* ppet = pdog;
 	}
-
 
 	return EXIT_SUCCESS;
 }
