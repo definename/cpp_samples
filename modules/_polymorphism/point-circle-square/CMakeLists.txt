@@ -6,14 +6,17 @@ set(PROJECT_HEADERS
 	include/Shape.h
 	include/Square.h
 	)
+
 set(PROJECT_RESOURCES
 	)
+
 set(PROJECT_SOURCES
 	src/main.cpp
 	src/Circle.cpp
 	src/Point.cpp
 	src/Square.cpp
 	)
+
 set(MISC
 	src/pch.h
 	src/pch.cpp
@@ -30,15 +33,15 @@ add_executable(${PROJECT_NAME}
 	${MISC}
 	)
 
-add_precompiled_headers(${PROJECT_NAME} "src/")
-
 include_directories(
 	include
 	)
+
 add_definitions(
 	-DUNICODE
 	-D_UNICODE
 	)
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "_interface")
+add_precompiled_headers(${PROJECT_NAME} "src/")
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROPERTY_FOLDER})
 #set_target_properties(${PROJECT_NAME} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)

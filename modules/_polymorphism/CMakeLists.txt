@@ -1,0 +1,5 @@
+set(PROPERTY_FOLDER "_polymorphism")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/employee)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/point-circle-square)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/virtual-output-function)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/with-reference)

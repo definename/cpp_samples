@@ -8,7 +8,7 @@ public:
 	~ClassA();
 
 public:
-	_tostream& put(_tostream& s) const;
+	_tostream& put(_tostream& s) const override;
 
 public:
 	_tstring val_;
