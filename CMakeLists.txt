@@ -89,7 +89,7 @@ add_subdirectory(modules/_containers)
 # add_subdirectory(modules/_move-semantic)
 # add_subdirectory(modules/_type-traits)
 # add_subdirectory(modules/_static)
-# add_subdirectory(modules/_condition_var)
+add_subdirectory(modules/_condition_var)
 # add_subdirectory(modules/_exception)
 # add_subdirectory(modules/_stl_re-implementation)
 
