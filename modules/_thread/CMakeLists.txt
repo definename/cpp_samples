@@ -1,0 +1,3 @@
+set(PROPERTY_FOLDER "_thread")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/condition_var)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thread_local)

@@ -1,4 +1,4 @@
-project(condition_test)
+project(condition_var)
 
 set(PROJECT_SOURCES
 	src/main.cpp

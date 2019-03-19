@@ -1,4 +1,4 @@
-project(thread)
+project(thread_local)
 
 set(PROJECT_SOURCES
 	src/main.cpp

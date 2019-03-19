@@ -5,6 +5,8 @@
 //
 
 #include <iostream>
+#include <thread>
+#include <mutex>
 
 //////////////////////////////////////////////////////////////////////////
 // Logger includes and definitions.
