@@ -2,7 +2,7 @@
 
 thread_local unsigned int range = 1;
 
-void Increase(unsigned int range, const std::string& funcName)
+void Increase(const std::string& funcName)
 {
 	++range;
 	logger::log->info("{}: {}", funcName, range);
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	logger::InitializeLog("console");
 	try
 	{
-		std::thread a(Increase, range, "a"), b(Increase, range, "b");
+		std::thread a(Increase, "a"), b(Increase, "b");
 
 		logger::log->info("main: {}", range);
 
