@@ -67,7 +67,7 @@ set(SPDLOG_INCLUDE_DIRS ${EXTERNAL_DIRECTORY}/spdlog/include)
 # logger ##################################################
 
 if(WITH_LOGGER)
-	set(Logger_Libraries logger)
+	set(Logger_LIBRARIES logger)
 	add_subdirectory(modules/logger)
 endif()
 
@@ -92,8 +92,9 @@ endif()
 # add_subdirectory(modules/_condition_var)
 # add_subdirectory(modules/_exception)
 # add_subdirectory(modules/_stl_re-implementation)
-add_subdirectory(modules/base_conversion)
 
+add_subdirectory(modules/base_conversion)
+add_subdirectory(modules/thread)
 # add_subdirectory(modules/dynamic_cast)
 # add_subdirectory(modules/atexit)
 # add_subdirectory(modules/assert)
