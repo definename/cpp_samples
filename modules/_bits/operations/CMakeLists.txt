@@ -25,7 +25,7 @@ target_include_directories(${PROJECT_NAME}
 		include
 	)
 target_link_libraries(${PROJECT_NAME}
-	${Logger_Libraries}
+	${Logger_LIBRARIES}
 	)
 add_definitions(
 	-DUNICODE
