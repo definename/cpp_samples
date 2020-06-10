@@ -1,78 +1,82 @@
-cmake_minimum_required(VERSION 3.13.1)
-
 project(cpp_samples)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
-option(BUILD_WITH_BOOST "Build project with boost libraries" ON)
-option(WITH_LOGGER "Build project with logger support" ON)
-
-include(PCHSupport)
-include(CRTLinkage)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
 # Where to put all the ARCHIVE targets when built.
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Where to put all the RUNTIME target files when built.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-# Use folder in project
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# External directory.
-set(EXTERNAL_DIRECTORY ${CMAKE_SOURCE_DIR}/external)
+if (UNIX)
+	message(STATUS "Host is Unix like: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_VERSION}")
+else()
+	cmake_minimum_required(VERSION 3.13.1)
+	list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-###########################################################
-# Version #################################################
+	option(BUILD_WITH_BOOST "Build project with boost libraries" ON)
+	option(WITH_LOGGER "Build project with logger support" ON)
 
-set(VERSION_MAJOR "1")
-set(VERSION_MINOR "0")
-set(VERSION_BUILD "0")
-set(REVISION_COUNT "0")
+	include(PCHSupport)
+	include(CRTLinkage)
 
-find_package(Git)
-if(GIT_FOUND)
-	execute_process(
-		COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
-		OUTPUT_VARIABLE DESCRIBE_BUILD
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
-	string(REGEX MATCH "[0-9]+" REVISION_COUNT ${DESCRIBE_BUILD})
-endif()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
+	# Use folder in project
+	SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(VERSION_REVISION "${REVISION_COUNT}")
-set(VERSION_FILE_REVISION "${REVISION_COUNT}")
-set(VERSION_COMPANY_NAME "Carrot Farm")
-set(VERSION_COPYRIGHT "Copyright (C) 2018 ${VERSION_COMPANY_NAME}")
+	# External directory.
+	set(EXTERNAL_DIRECTORY ${CMAKE_SOURCE_DIR}/external)
 
-###########################################################
-# Boost ###################################################
+	###########################################################
+	# Version #################################################
 
-if(BUILD_WITH_BOOST)
-	set(Boost_USE_STATIC_LIBS ON)
-	set(Boost_USE_MULTITHREADED ON)
-	set(Boost_USE_STATIC_RUNTIME ON)
-	find_package(Boost REQUIRED COMPONENTS
-		filesystem
-		date_time
-		thread
-		)
-endif()
+	set(VERSION_MAJOR "1")
+	set(VERSION_MINOR "0")
+	set(VERSION_BUILD "0")
+	set(REVISION_COUNT "0")
 
-###########################################################
-# spdlog ##################################################
+	find_package(Git)
+	if(GIT_FOUND)
+		execute_process(
+			COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
+			OUTPUT_VARIABLE DESCRIBE_BUILD
+			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+			OUTPUT_STRIP_TRAILING_WHITESPACE)
+		string(REGEX MATCH "[0-9]+" REVISION_COUNT ${DESCRIBE_BUILD})
+	endif()
 
-set(SPDLOG_INCLUDE_DIRS ${EXTERNAL_DIRECTORY}/spdlog/include)
+	set(VERSION_REVISION "${REVISION_COUNT}")
+	set(VERSION_FILE_REVISION "${REVISION_COUNT}")
+	set(VERSION_COMPANY_NAME "Carrot Farm")
+	set(VERSION_COPYRIGHT "Copyright (C) 2018 ${VERSION_COMPANY_NAME}")
 
-###########################################################
-# logger ##################################################
+	###########################################################
+	# Boost ###################################################
 
-if(WITH_LOGGER)
-	set(Logger_LIBRARIES logger)
-	add_subdirectory(modules/logger)
+	if(BUILD_WITH_BOOST)
+		set(Boost_USE_STATIC_LIBS ON)
+		set(Boost_USE_MULTITHREADED ON)
+		set(Boost_USE_STATIC_RUNTIME ON)
+		find_package(Boost REQUIRED COMPONENTS
+			filesystem
+			date_time
+			thread
+			)
+	endif()
+
+	###########################################################
+	# spdlog ##################################################
+
+	set(SPDLOG_INCLUDE_DIRS ${EXTERNAL_DIRECTORY}/spdlog/include)
+
+	###########################################################
+	# logger ##################################################
+
+	if(WITH_LOGGER)
+		set(Logger_LIBRARIES logger)
+		add_subdirectory(modules/logger)
+	endif()
 endif()
 
 # add_subdirectory(modules/_algorithms)
-add_subdirectory(modules/_bits)
+# add_subdirectory(modules/_bits)
 # add_subdirectory(modules/_binders)
 # add_subdirectory(modules/_deitel_tasks)
 # add_subdirectory(modules/_idioms)
@@ -129,3 +133,5 @@ add_subdirectory(modules/_bits)
 # add_subdirectory(modules/tuple)
 # add_subdirectory(modules/unnamed_arguments)
 # add_subdirectory(modules/xy_line_coordinate)
+
+add_subdirectory(modules/solid_principles)
