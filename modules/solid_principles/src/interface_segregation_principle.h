@@ -1,8 +1,6 @@
 #include <iostream>
 
-/*********************************
-Interface definition
-*********************************/
+/* Interface definition */
 
 class IPrint {
     public:
@@ -22,9 +20,7 @@ class IFax {
     virtual void internetFax() = 0;
 };
 
-/*********************************
-Interface implementation
-*********************************/
+/* Interface implementation */
 
 class XeroxWorkCentre: public IPrint, IScan, IFax {
     public:
