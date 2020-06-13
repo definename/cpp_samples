@@ -4,7 +4,8 @@
 S - single responsibility
     "Every software component should have one and only one responsibility"
     "Every software component should have one and only one reason to change"
-O
+O - open-closed principle
+    "Software components should be closed for modification, but open for extension"
 L
 I
 D
