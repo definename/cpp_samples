@@ -135,3 +135,4 @@ add_subdirectory(modules/_move-semantic)
 # add_subdirectory(modules/xy_line_coordinate)
 
 add_subdirectory(modules/solid_principles)
+add_subdirectory(modules/array)
