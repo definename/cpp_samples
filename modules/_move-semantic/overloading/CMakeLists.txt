@@ -32,7 +32,9 @@ add_definitions(
 #add_dependencies(${PROJECT_NAME}
 #	)
 
-add_precompiled_headers(${PROJECT_NAME} "src/")
+if (WIN32)
+	add_precompiled_headers(${PROJECT_NAME} "src/")
+endif()
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROPERTY_FOLDER})
 #set_target_properties(${PROJECT_NAME} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)

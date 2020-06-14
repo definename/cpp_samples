@@ -1,12 +1,14 @@
 #include "pch.h"
 
+/* move */
 void DoProcess(const std::string& lvalue) {
-	std::cout << "lvalue" << std::endl;
+	std::cout << "lvalue " << lvalue << std::endl;
 }
 void DoProcess(std::string&& rvalue) {
-	std::cout << "rvalue" << std::endl;
+	std::cout << "rvalue " << rvalue << std::endl;
 }
 
+/* forward */
 template<typename T>
 void Process(T&& param) {
 	DoProcess(std::forward<T>(param));
@@ -32,7 +34,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		{
-			std::string val;
+			std::string val = "customval";
 			Process(val);
 			Process(std::move(val));
 		}
