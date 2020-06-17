@@ -1,10 +1,7 @@
 #pragma once
 
-class Window
-{
+class Window {
 public:
-	virtual ~Window() { };
-
-public:
+	virtual ~Window() = default;
 	virtual void Draw() = 0;
 };

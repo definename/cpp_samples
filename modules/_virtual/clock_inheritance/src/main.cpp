@@ -1,12 +1,14 @@
-#include "pch.h"
+#include <iostream>
+#include <typeinfo>
+#include <queue>
+
 #include "Clock.h"
 
 typedef Window* WindowPtr;
 
-void _tmain(int argc, TCHAR* argv[])
+int main(int argc, char* argv[])
 {
-	try
-	{
+	try {
 		std::deque<WindowPtr> box;
 
 		WindowBorder* winBorder = new WindowBorder;
@@ -18,19 +20,18 @@ void _tmain(int argc, TCHAR* argv[])
 		Clock* clock = new Clock;
 		box.insert(box.begin(), clock);
 
-		for (WindowPtr i : box)
-		{
-			_tcout << typeid(*i).name() << std::endl;
+		for (WindowPtr i: box) {
+			std::cout << typeid(*i).name() << std::endl;
 			i->Draw();
-			_tcout << std::endl;
+			std::cout << std::endl;
 		}
 		box.clear();
 
 		delete clock;
 		delete winBorder;
 	}
-	catch (const std::exception& e)
-	{
-		_tcerr << _T("Error occurred: ") << e.what() << std::endl;
+	catch (const std::exception& e) {
+		std::cerr << "Error occurred: " << e.what() << std::endl;
 	}
+	return EXIT_SUCCESS;
 }
