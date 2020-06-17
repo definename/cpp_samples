@@ -75,7 +75,7 @@ else()
 	endif()
 endif()
 
-# add_subdirectory(modules/_algorithms)
+add_subdirectory(modules/_algorithms)
 # add_subdirectory(modules/_bits)
 # add_subdirectory(modules/_binders)
 # add_subdirectory(modules/_deitel_tasks)

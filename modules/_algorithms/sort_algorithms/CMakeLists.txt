@@ -1,4 +1,4 @@
-project(bubble-sort)
+project(sort_algorithms)
 
 set(PROJECT_HEADERS
 	)
@@ -6,8 +6,6 @@ set(PROJECT_SOURCES
 	src/main.cpp
 	)
 set(MISC
-	src/pch.h
-	src/pch.cpp
 	)
 
 source_group("Source Files" FILES ${PROJECT_SOURCES})
@@ -19,8 +17,6 @@ add_executable(${PROJECT_NAME}
 	${PROJECT_SOURCES}
 	${MISC}
 	)
-
-add_precompiled_headers(${PROJECT_NAME} "src/")
 
 include_directories(
 	include
