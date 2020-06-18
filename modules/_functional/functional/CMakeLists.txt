@@ -6,8 +6,6 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
 	)
 set(MISC
-	src/pch.h
-	src/pch.cpp
 	)
 
 source_group("Source Files" FILES ${PROJECT_SOURCES})
@@ -31,8 +29,5 @@ add_definitions(
 	)
 # add_dependencies(${PROJECT_NAME}
 	# )
-
-add_precompiled_headers(${PROJECT_NAME} "src/")
-
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROPERTY_FOLDER})
 #set_target_properties(${PROJECT_NAME} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)
