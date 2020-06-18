@@ -20,15 +20,12 @@ int main()
 {
 	Coll coll;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Copy
+	/* Copy... */
 	std::list<int> src({ 1, 2, 4, 46, -2, 234, 90 });
 	std::copy(src.begin(), src.end(), std::back_inserter(coll));
 	PRINT_COLLECTION(coll);
 
-	//////////////////////////////////////////////////////////////////////////
-	// Sort
-
+	/* Sort... */
 	{
 		std::cout << "Sort..." << std::endl;
 		std::sort(coll.begin(), coll.end(), std::less<Coll::value_type>());
@@ -42,9 +39,7 @@ int main()
 		PRINT_COLLECTION(coll);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Insert
-
+	/* Insert...*/
 	{
 		std::cout << "Insert..." << std::endl;
 		Coll::iterator it = std::find(coll.begin(), coll.end(), 46);
@@ -60,25 +55,42 @@ int main()
 		PRINT_COLLECTION(coll);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Remove
 
+	/* Remove... */
 	{
 		std::cout << "Remove..." << std::endl;
-		auto it = std::remove_if(
-			coll.begin(),
-			coll.end(),
-			[](const Coll::value_type& val) ->bool { return  val % 2 != 0; });
-		coll.erase(it, coll.end());
+		// 1
+		auto pred = [](const Coll::value_type& val) -> bool { return  val % 2 != 0; };
+		coll.erase(std::remove_if(coll.begin(), coll.end(), pred), coll.end());
 		coll.shrink_to_fit();
 		PRINT_COLLECTION(coll);
 
+		// 2
 		auto quickRemove = [](Coll& coll, const std::size_t index) -> void
 		{
 			coll[index] = std::move(coll.back());
 			coll.pop_back();
 		};
 		quickRemove(coll, 0);
+		PRINT_COLLECTION(coll);
+	}
+
+	/* Find missed from sequence */
+	{
+		Coll coll = {1, 2, 3, 6, 7, 7, 4, 2};
+		Coll tmp_coll(coll.size() + 1);
+		std::fill_n(tmp_coll.begin(), tmp_coll.size(), 0);
+		for (const auto& val: coll) {
+			tmp_coll[val] = 1;
+		}
+		tmp_coll[0] = 1;
+
+		coll.clear();
+		for (std::size_t i = 0; i < tmp_coll.size(); ++i) {
+			if (tmp_coll[i] == 0) {
+				coll.push_back(i);
+			}
+		}
 		PRINT_COLLECTION(coll);
 	}
 	return EXIT_SUCCESS;
