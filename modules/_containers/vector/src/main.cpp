@@ -1,27 +1,27 @@
-#include "pch.h"
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <list>
+#include <sstream>
+#include <functional>
 
 template <typename T>
-void PRINT_COLLECTION(const T& cont)
-{
+void PRINT_COLLECTION(const T& cont) {
 	std::ostringstream ss;
 	for (const auto& val : cont) {
 		ss << val << " ";
 	}
-	logger::log->info("{} ", ss.str());
+	std::cout << ss.str() << std::endl;
 }
 
 using Coll = std::vector<int>;
 
 int main()
 {
-	logger::InitializeLog("console");
-
 	Coll coll;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Copy
-	logger::log->trace("Copy...");
-
 	std::list<int> src({ 1, 2, 4, 46, -2, 234, 90 });
 	std::copy(src.begin(), src.end(), std::back_inserter(coll));
 	PRINT_COLLECTION(coll);
@@ -30,7 +30,7 @@ int main()
 	// Sort
 
 	{
-		logger::log->trace("Sort...");
+		std::cout << "Sort..." << std::endl;
 		std::sort(coll.begin(), coll.end(), std::less<Coll::value_type>());
 		PRINT_COLLECTION(coll);
 		std::sort(coll.begin(), coll.end(), std::bind(std::less<Coll::value_type>(), std::placeholders::_1, std::placeholders::_2));
@@ -46,7 +46,7 @@ int main()
 	// Insert
 
 	{
-		logger::log->trace("Insert...");
+		std::cout << "Insert..." << std::endl;
 		Coll::iterator it = std::find(coll.begin(), coll.end(), 46);
 		coll.insert(it, 999);
 		PRINT_COLLECTION(coll);
@@ -64,7 +64,7 @@ int main()
 	// Remove
 
 	{
-		logger::log->trace("Remove...");
+		std::cout << "Remove..." << std::endl;
 		auto it = std::remove_if(
 			coll.begin(),
 			coll.end(),
@@ -81,8 +81,5 @@ int main()
 		quickRemove(coll, 0);
 		PRINT_COLLECTION(coll);
 	}
-
-	logger::UninitializeLog();
-
-	return 0;
+	return EXIT_SUCCESS;
 }

@@ -1,23 +1,24 @@
-#include "pch.h"
+#include <iostream>
+#include <map>
+#include <functional>
+#include <numeric>
+#include <sstream>
 
 template <typename T>
-void PRINT_MAP(const T& cont)
-{
+void PRINT_MAP(const T& cont) {
 	std::ostringstream ss;
 	for (const auto& [key, value] : cont) {
 		ss << key << " " << value << " ";
 	}
-	logger::log->info("{} ", ss.str());
+	std::cout << ss.str() << std::endl;
 }
 
 int main()
 {
-	logger::InitializeLog("console");
-
 	//////////////////////////////////////////////////////////////////////////
 	// Accumulate values
 	{
-		logger::log->trace("Accumulate values...");
+		std::cout << "Accumulate values..." << std::endl;
 		using Coll = std::map<std::string, int>;
 
 		Coll coll({
@@ -31,13 +32,13 @@ int main()
 			std::placeholders::_1,
 			std::bind(&Coll::value_type::second, std::placeholders::_2));
 
-		logger::log->info("Value sum: ", std::accumulate(coll.begin(), coll.end(), 0, op));
+		std::cout << "Value sum: ", std::accumulate(coll.begin(), coll.end(), 0, op);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Change keys
 	{
-		logger::log->trace("Change keys...");
+		std::cout << "Change keys..." << std::endl;
 		using Coll = std::map<int, std::string>;
 
 		Coll coll {
@@ -59,9 +60,5 @@ int main()
 
 		PRINT_MAP<Coll>(coll);
 	}
-
-	logger::UninitializeLog();
-
-
-	return 0;
+	return EXIT_SUCCESS;
 }

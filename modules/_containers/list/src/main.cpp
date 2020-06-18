@@ -1,21 +1,20 @@
-#include "pch.h"
+#include <list>
+#include <iostream>
+#include <sstream>
 
 template <typename T>
-void PRINT_COLLECTION(const T& cont)
-{
+void PRINT_COLLECTION(const T& cont) {
 	std::ostringstream ss;
 	for (const auto& val : cont) {
 		ss << val << " ";
 	}
-	logger::log->info("{} ", ss.str());
+	std::cout << ss.str() << std::endl;
 }
 
 using Coll = std::list<int>;
 
 int main()
 {
-	logger::InitializeLog("console");
-
 	Coll coll1 = { 1, 2, 99, 12, 43, 221, 87 };
 	Coll coll2 = { 1, 66, 23, 2, 99, 12, 43, 221, 87 , 999 };
 
@@ -23,7 +22,7 @@ int main()
 	//////////////////////////////////////////////////////////////////////////
 	// Merge
 
-	logger::log->trace("Merge...");
+	std::cout << "Merge..." << std::endl;
 
 	coll1.sort();
 	coll2.sort();
@@ -36,10 +35,5 @@ int main()
 	}
 
 	PRINT_COLLECTION(coll1);
-
-
-
-	logger::UninitializeLog();
-
-	return 0;
+	return EXIT_SUCCESS;
 }
