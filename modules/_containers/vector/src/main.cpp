@@ -79,19 +79,13 @@ int main()
 	{
 		Coll coll = {1, 2, 3, 6, 7, 7, 4, 2};
 		Coll tmp_coll(coll.size() + 1);
-		std::fill_n(tmp_coll.begin(), tmp_coll.size(), 0);
+		std::generate(tmp_coll.begin(), tmp_coll.end(), [](){ static int i = 0; return i++; });
 		for (const auto& val: coll) {
-			tmp_coll[val] = 1;
+			tmp_coll[val] = 0;
 		}
-		tmp_coll[0] = 1;
-
-		coll.clear();
-		for (std::size_t i = 0; i < tmp_coll.size(); ++i) {
-			if (tmp_coll[i] == 0) {
-				coll.push_back(i);
-			}
-		}
-		PRINT_COLLECTION(coll);
+		auto g = [](const int& val){ return val == 0; };
+		tmp_coll.erase(std::remove_if(tmp_coll.begin(), tmp_coll.end(), g), tmp_coll.end());
+		PRINT_COLLECTION(tmp_coll);
 	}
 	return EXIT_SUCCESS;
 }
