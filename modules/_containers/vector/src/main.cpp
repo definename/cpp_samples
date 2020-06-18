@@ -77,6 +77,7 @@ int main()
 
 	/* Find missed from sequence */
 	{
+		std::cout << "Find missed from sequence..." << std::endl;
 		Coll coll = {1, 2, 3, 6, 7, 7, 4, 2};
 		Coll tmp_coll(coll.size() + 1);
 		std::generate(tmp_coll.begin(), tmp_coll.end(), [](){ static int i = 0; return i++; });
