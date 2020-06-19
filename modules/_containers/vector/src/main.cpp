@@ -16,8 +16,50 @@ void PRINT_COLLECTION(const T& cont) {
 
 using Coll = std::vector<int>;
 
+#include <chrono>
+#include <list>
+#include <cassert>
+#include <cstdlib>
+
+void check_time_to_iterate_vector_and_list(const int test_size = 10000000) {
+	std::cout << "Test on:" << test_size << " elements" << std::endl;
+	std::vector<int> test_vec;
+	std::list<int> test_list;
+
+	for (int i = 0; i < test_size; ++i) {
+		int gen = rand();
+		test_vec.push_back(gen);
+		test_list.push_back(gen);
+	}
+	std::sort(test_vec.begin(), test_vec.end());
+	test_list.sort();
+
+	long long int res_list = 0;
+	auto start = std::chrono::system_clock::now();
+	for (const auto& val: test_list) {
+		res_list += val;
+	}
+	auto stop = std::chrono::system_clock::now();
+	auto list_tick_count = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+	std::cout << "List tick result:" << list_tick_count << std::endl;
+
+	long long int res_vec = 0;
+	start = std::chrono::system_clock::now();
+	for (const auto& val: test_vec) {
+		res_vec += val;
+	}
+	stop = std::chrono::system_clock::now();
+	auto vec_tick_count = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+	std::cout << "Vector tick result:" << vec_tick_count << std::endl;
+
+	assert(res_vec == res_list);
+	std::cout << ((list_tick_count > vec_tick_count) ? "Vector" : "List") << " won!!" << std::endl;
+}
+
 int main()
 {
+	check_time_to_iterate_vector_and_list();
+
 	Coll coll;
 
 	/* Copy... */
@@ -88,5 +130,6 @@ int main()
 		tmp_coll.erase(std::remove_if(tmp_coll.begin(), tmp_coll.end(), g), tmp_coll.end());
 		PRINT_COLLECTION(tmp_coll);
 	}
+
 	return EXIT_SUCCESS;
 }
