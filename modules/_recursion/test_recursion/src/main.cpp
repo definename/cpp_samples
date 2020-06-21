@@ -28,6 +28,14 @@ int pow(const int m, const int n) {
 	return pow(m, n -1) * m;
 }
 
+int fibonacci(const int n) {
+	assert(n >= 0);
+	if (n <= 1) {
+		return n;
+	}
+	return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
 void func(const int i) {
 	if (i > 0) {
 		std::cout << i << " ";
@@ -47,13 +55,18 @@ int main(int argc, char* argv[]) {
 	assert(res_recursion == res_formula);
 
 	// Factorial
-	assert(factorial(1) == 1);
 	assert(factorial(0) == 1);
+	assert(factorial(1) == 1);
 	std::cout << "Factorial:" << factorial(3) << std::endl;
 
 	// Power
 	assert(pow(100, 0) == 1);
-	std::cout << pow(3, 3) << std::endl;
+	std::cout << "Power:" << pow(3, 3) << std::endl;
+
+	// Fibonacci
+	assert(fibonacci(0) == 0);
+	assert(fibonacci(1) == 1);
+	std::cout << "Fibonacci:" << fibonacci(10) << std::endl;
 
 	return EXIT_SUCCESS;
 }
