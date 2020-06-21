@@ -1,5 +1,25 @@
 #include <iostream>
 
+void create_1d_array_dynamic(void) {
+    const int size = 5;
+    int* arr = new int[size];
+    for (int i = 0; i < size; i++) {
+        arr[i] = i * 2;
+    }
+
+    int *test_arr_ptr = arr;
+    std::cout << "1d access via ptr arr[2]:" << *(test_arr_ptr + 2) << std::endl;
+    std::cout << "1d access via ptr arr[1]:" << *(++test_arr_ptr) << std::endl;
+
+    std::cout << "1d array dynamic:" << std::endl;
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    delete [] arr;
+}
+
 void create_2d_array_static_row_dynamic_column(void) {
     const int row = 3;
     int* a[row];
@@ -56,17 +76,7 @@ void create_2darray_dymanic_row_dynamic_column(void) {
 }
 
 int main(int argc, char *argv[]) {
-    const int size = 5;
-    int* arr = new int[size];
-    for (int i = 0; i < size; i++) {
-        arr[i] = i * 2;
-    }
-
-    for (int i = 0; i < size; i++) {
-        std::cout << arr[i] << std::endl;
-    }
-    delete [] arr;
-
+    create_1d_array_dynamic();
     create_2d_array_static_row_dynamic_column();
     create_2darray_dymanic_row_dynamic_column();
 
