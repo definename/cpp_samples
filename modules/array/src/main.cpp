@@ -1,5 +1,60 @@
 #include <iostream>
 
+void create_2d_array_static_row_dynamic_column(void) {
+    const int row = 3;
+    int* a[row];
+    const int col = 4;
+    a[0] = new int[col];
+    a[1] = new int[col];
+    a[2] = new int[col];
+    for (int r = 0; r < row; ++r) {
+        for (int c = 0; c < col; ++c) {
+            a[r][c] = c * 10;
+        }
+    }
+    std::cout << "2d array static+heap:" << std::endl;
+    for (int r = 0; r < row; ++r) {
+        for (int c = 0; c < col; ++c) {
+            std::cout << a[r][c] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    for (int r = 0; r < row; ++r) {
+        delete [] a[r];
+    }
+}
+
+void create_2darray_dymanic_row_dynamic_column(void) {
+    int **a;
+    const int row = 3;
+    a = new int*[row];
+
+    const int col = 4;
+    for (int r = 0; r < row; ++r) {
+        a[r] = new int[col];
+    }
+
+    for (int r = 0; r < row; ++r) {
+        for (int c = 0; c < col; ++c) {
+            a[r][c] = c + 11;
+        }
+    }
+
+    std::cout << "2d array heap:" << std::endl;
+    for (int r = 0; r < row; ++r) {
+        for (int c = 0; c < col; ++c) {
+            std::cout << a[r][c] <<  " ";
+        }
+        std::cout << std::endl;
+    }
+
+    for (int r = 0; r < row; ++r) {
+        delete [] a[r];
+    }
+    delete [] a;
+}
+
 int main(int argc, char *argv[]) {
     const int size = 5;
     int* arr = new int[size];
@@ -11,5 +66,9 @@ int main(int argc, char *argv[]) {
         std::cout << arr[i] << std::endl;
     }
     delete [] arr;
+
+    create_2d_array_static_row_dynamic_column();
+    create_2darray_dymanic_row_dynamic_column();
+
     return EXIT_SUCCESS;
 }
