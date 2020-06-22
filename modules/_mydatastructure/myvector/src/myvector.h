@@ -1,3 +1,5 @@
+#include <cstring>
+
 namespace datastruct {
 
 template<typename T>
@@ -7,10 +9,11 @@ class Vector {
     using const_iterator = const T*;
     using reference = T&;
     using const_reference = const T&;
+    using size_type = std::size_t;
 
-    Vector(const int length) {
-        arr_ = new T[length];
-        length_ = length;
+    Vector(const size_type reserver_size) {
+        reserver_size_ = reserver_size;
+        arr_ = new T[reserver_size_];
         size_ = 0;
     }
 
@@ -19,12 +22,16 @@ class Vector {
     }
 
     void push_back(const T& val) {
-        // TODO: Realloc if needed!
+        if (reserver_size_ == size_) {
+            reserver_size_ *= 2;
+            reallocate();
+        }
+
         arr_[size_] = val;
         ++size_;
     }
 
-    void pop_bach() {
+    void pop_back() {
         --size_;
     }
 
@@ -37,14 +44,18 @@ class Vector {
     }
 
     Vector<T>::iterator insert(Vector<T>::iterator it, const T& val) {
-        // TODO: Realloc if needed!
-        Vector<T>::iterator end = it + size_ + 1;
-        while(it != end) {
-            *end = *(end - 1);
-            end--;
+        const size_type index = it - arr_;
+        if (reserver_size_ == size_) {
+            reserver_size_ *= 2;
+            reallocate();
         }
-        *it = val;
-        size_++;
+
+        iterator actual_it = arr_ + index;
+        std::memmove(reinterpret_cast<void*>(actual_it + 1),
+                     reinterpret_cast<void*>(actual_it),
+                     (size_ - index) * sizeof(T));
+        *actual_it = val;
+        ++size_;
     }
 
     int size() const {
@@ -68,9 +79,20 @@ class Vector {
     }
 
     private:
+    void reallocate() {
+        T* tmp = new T[reserver_size_];
+        std::memcpy(reinterpret_cast<void*>(tmp),
+                    reinterpret_cast<void*>(arr_),
+                    reserver_size_ * sizeof(T));
+        delete [] arr_;
+        arr_ = tmp;
+    }
+
+    private:
     T* arr_;
-    int size_;
-    int length_;
+    size_type size_;
+    size_type reserver_size_;
+    
 };
 
 }
