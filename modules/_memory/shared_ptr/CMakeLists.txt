@@ -6,8 +6,6 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
 	)
 set(MISC
-	src/pch.h
-	src/pch.cpp
 	)
 
 add_executable(${PROJECT_NAME}
@@ -19,8 +17,6 @@ add_executable(${PROJECT_NAME}
 source_group("Source Files" FILES ${PROJECT_SOURCES})
 source_group("Header Files" FILES ${PROJECT_HEADERS})
 source_group("" FILES ${MISC})
-
-add_precompiled_headers(${PROJECT_NAME} "src/")
 
 include_directories(
 	include

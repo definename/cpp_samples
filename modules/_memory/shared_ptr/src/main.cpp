@@ -1,39 +1,55 @@
-#include "pch.h"
+#include <iostream>
+#include <memory>
+#include <string>
 
-struct Test {
-	int val1_;
-	int val2_;
+class Test1 {
+	public:
+	Test1() {
+		std::cout << "Test1 constructed" << std::endl;
+	}
+};
+
+class Test2 {
+	public:
+	Test2() {
+		std::cout << "Test2 constructed" << std::endl;
+	}
+};
+
+class Test {
+	public:
+	Test()
+	: will_be_initialized_second_(Test1())
+	, will_be_initialized_first_(Test2()) {
+	}
+	Test2 will_be_initialized_first_;
+	Test1 will_be_initialized_second_;
 };
 
 struct Person
 {
 	Person(const std::string& name)
-		: name_(name)
-	{
+		: name_(name) {
 	}
-	~Person()
-	{
+	~Person() {
 		std::cout << "Person destroyed: " << name_ << std::endl;
 	}
 
 	//! It works.
-	// std::weak_ptr<Person> part_;
+	std::weak_ptr<Person> part_;
 	//! It does not work.
-	std::shared_ptr<Person> part_;
+	// std::shared_ptr<Person> part_;
 	std::string name_;
 };
 
-int main(int argc, TCHAR* argv[])
+int main(int argc, char* argv[])
 {
-	try
-	{
+	try {
 		auto del = [](Test* t) {
-			std::cout << "Test val1 is being destroyed: " << t->val1_ << std::endl;
-			std::cout << "Test val2 is being destroyed: " << t->val2_ << std::endl;
+			std::cout << "Test object is being destroyed:" << t << std::endl;
 			delete t;
 		};
-
-		std::shared_ptr<Test> obj1(new Test{ 99, 11 }, del);
+		std::shared_ptr<Test> obj1(new Test, del);
 
 		// Person destructor is never called, use weak_ptr for Person member.
 		{
@@ -47,10 +63,8 @@ int main(int argc, TCHAR* argv[])
 			std::cout << p2.use_count() << std::endl;
 		}
 	}
-	catch (const std::exception& e)
-	{
-		_tcerr << _T("Error occurred: ") << e.what() << std::endl;
+	catch (const std::exception& e) {
+		std::cerr << "Error occurred: " << e.what() << std::endl;
 	}
-
-	return 0;
+	return EXIT_SUCCESS;
 }
