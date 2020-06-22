@@ -2,6 +2,7 @@ set(PROPERTY_FOLDER "_algorithms")
 
 # add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/accumulate)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/sort_algorithms)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/search_algorithms)
 # add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fibonacci)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/binary_heap)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/binary_tree)
