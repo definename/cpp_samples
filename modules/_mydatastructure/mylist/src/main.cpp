@@ -65,12 +65,36 @@ void merge_two_sorted_linked_lists(void) {
 
     dump_list(dst);
     dump_list(src);
+}
 
+void find_loop_in_linked_list(void) {
+    MyList* head = nullptr;
+    MyList* node = add(&head, 1);
+    node = add(&node->next_, 3);
+    node = add(&node->next_, 5);
+    // Create loop
+    node->next_ = head;
+
+    MyList* slow = head;
+    MyList* fast = head->next_;
+    while (fast != nullptr) {
+        fast = fast->next_;
+
+        if (slow == fast) {
+            std::cout << "loop found:"
+            << slow << ":" <<  slow->val_ << " "
+            << fast << ":" << fast->val_ << std::endl;
+            break;
+        }
+        fast = fast->next_;
+        slow = slow->next_;
+    }
 }
 
 int main(int argc, char *argv[]) {
 
     merge_two_sorted_linked_lists();
+    find_loop_in_linked_list();
 
     return EXIT_SUCCESS;
 }
