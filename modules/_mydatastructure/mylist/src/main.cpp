@@ -24,7 +24,7 @@ static void dump_list(MyList* head) {
     std::cout << std::endl;
 }
 
-int main(int argc, char *argv[]) {
+void merge_two_sorted_linked_lists(void) {
     MyList* node = nullptr;
 
     MyList* dst = nullptr;
@@ -65,5 +65,12 @@ int main(int argc, char *argv[]) {
 
     dump_list(dst);
     dump_list(src);
+
+}
+
+int main(int argc, char *argv[]) {
+
+    merge_two_sorted_linked_lists();
+
     return EXIT_SUCCESS;
 }
