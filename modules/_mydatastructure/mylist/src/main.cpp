@@ -90,7 +90,6 @@ void find_loop_in_linked_list(void) {
         slow = slow->next_;
     }
 }
-
 int main(int argc, char *argv[]) {
 
     merge_two_sorted_linked_lists();
