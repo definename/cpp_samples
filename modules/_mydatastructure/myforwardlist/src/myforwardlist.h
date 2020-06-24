@@ -5,13 +5,15 @@ namespace dslist {
 
 template<typename T>
 struct FwdListNode {
-    FwdListNode(const T& data = T(), FwdListNode<T>* next = nullptr) {
+    using Self = FwdListNode<T>;
+
+    FwdListNode(const T& data = T(), Self* next = nullptr) {
         data_ = data;
         next_ = next;
     }
 
     T data_;
-    FwdListNode<T>* next_;
+    Self* next_;
 };
 
 template<typename T>
