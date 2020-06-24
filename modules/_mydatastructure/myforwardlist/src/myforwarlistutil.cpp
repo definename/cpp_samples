@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "myforwarlistutil.h"
 
 namespace dsutil {
@@ -43,6 +44,27 @@ std::size_t fwd_list_count(FwdNode* head) {
         ++size;
     }
     return size;
+}
+
+int fwd_list_find_max(const FwdNode* head) {
+    int max = std::numeric_limits<int>::min();
+    while (head != nullptr) {
+        if (head->data_ > max) {
+            max = head->data_;
+        }
+        head = head->next_;
+    }
+    return max;
+}
+
+FwdNode* fwd_list_search(FwdNode* head, const int key) {
+    while (head != nullptr) {
+        if (head->data_ == key) {
+            return head;
+        }
+        head = head->next_;
+    }
+    return nullptr;
 }
 
 }
