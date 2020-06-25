@@ -1,25 +1,15 @@
 #include <iostream>
 #include "myforwardlist.h"
+#include "findloop.h"
 
 #include <forward_list>
 
 int main(int argc, char *argv[]) {
+
+    find_loop_in_linked_list();
+
+    // My template implementation
     {
-        std::forward_list<int> l = {1, 2, 2, 97, 99};
-
-        std::forward_list<int> ll = {0, 10, 20};
-        l.merge(ll);
-
-        std::forward_list<int>::const_iterator it = l.begin();
-        for (it; it != l.end(); ++it) {
-            std::cout << *it << " ";
-        }
-        std::cout << std::endl;
-
-    }
-
-    {
-        // My template implementation
         dslist::ForwardList<int> l;
         l.push_front(99);
         l.push_front(97);
@@ -43,5 +33,16 @@ int main(int argc, char *argv[]) {
         std::cout << std::endl;
     }
 
+    {
+        std::forward_list<int> l = {1, 2, 2, 97, 99};
+        std::forward_list<int> other = {0, 10, 20};
+        l.merge(other);
+
+        std::forward_list<int>::const_iterator it = l.begin();
+        for (it; it != l.end(); ++it) {
+            std::cout << *it << " ";
+        }
+        std::cout << std::endl;
+    }
     return EXIT_SUCCESS;
 }

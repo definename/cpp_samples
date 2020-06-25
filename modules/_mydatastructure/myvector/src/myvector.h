@@ -1,6 +1,9 @@
+#ifndef MY_VECTOR_H
+#define MY_VECTOR_H
+
 #include <cstring>
 
-namespace datastruct {
+namespace dsvector {
 
 template<typename T>
 class Vector {
@@ -96,3 +99,5 @@ class Vector {
 };
 
 }
+
+#endif

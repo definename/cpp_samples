@@ -1,7 +1,7 @@
 #include <iostream>
 #include "myvector.h"
 
-using MyVector = datastruct::Vector<int>;
+using MyVector = dsvector::Vector<int>;
 
 static void dump_vector(const MyVector& v) {
     MyVector::const_iterator it = v.begin();

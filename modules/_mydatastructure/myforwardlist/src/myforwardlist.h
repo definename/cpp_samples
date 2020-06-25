@@ -1,18 +1,19 @@
-#ifndef MYFORWARDLIST
-#define MYFORWARDLIST
+#ifndef MY_FORWARD_LIST_H
+#define MY_FORWARD_LIST_H
 
 namespace dslist {
 
 template<typename T>
 struct FwdListNode {
     using Self = FwdListNode<T>;
+    using value_type = T;
 
     FwdListNode(const T& data = T(), Self* next = nullptr) {
         data_ = data;
         next_ = next;
     }
 
-    T data_;
+    value_type data_;
     Self* next_;
 };
 
