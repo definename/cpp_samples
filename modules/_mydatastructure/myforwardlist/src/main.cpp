@@ -42,22 +42,20 @@ int main(int argc, char *argv[]) {
         l.push_front(2);
         l.push_front(1);
 
+        dslist::ForwardList<int> other;
+        other.push_front(20);
+        other.push_front(10);
+        other.push_front(0);
+
         // l.reverse();
         // l.unique();
-
-        dslist::ForwardList<int> ll;
-        ll.push_front(20);
-        ll.push_front(10);
-        ll.push_front(0);
-
-        l.merge(ll);
+        l.merge(other);
 
         dslist::ForwardList<int>::const_iterator it = l.begin();
         for (it; it != l.cend(); it++) {
             std::cout << *it << " ";
         }
         std::cout << std::endl;
-        l.pop_front();
     }
 
     return EXIT_SUCCESS;
