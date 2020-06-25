@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     // ll.push_front(3);
     // ll.push_front(3);
 
-    // ll.unique();
+    // ll.reverse();
 
     // std::forward_list<int>::const_iterator it = ll.begin();
     // for (it; it != ll.end(); ++it) {
@@ -44,12 +44,14 @@ int main(int argc, char *argv[]) {
     l.push_front(3);
     l.push_front(3);
 
-    l.unique();
+    l.reverse();
+    // l.unique();
 
     dslist::ForwardList<int>::const_iterator it = l.begin();
     for (it; it != l.cend(); it++) {
-        std::cout << *it << std::endl;
+        std::cout << *it << " ";
     }
+    std::cout << std::endl;
     l.pop_front();
 
     return EXIT_SUCCESS;

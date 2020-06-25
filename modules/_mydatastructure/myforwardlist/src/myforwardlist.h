@@ -172,6 +172,20 @@ class ForwardList {
         }
     }
 
+    void reverse() {
+        NodeType* head = head_;
+        NodeType* mid = nullptr, *tail = nullptr;
+
+        while (head) {
+            tail = mid;
+            mid = head;
+            head = head->next_;
+
+            mid->next_ = tail;
+        }
+        head_ = mid;
+    }
+
     private:
     NodeType* head_;
 };
