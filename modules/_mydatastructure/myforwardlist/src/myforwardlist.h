@@ -122,9 +122,11 @@ class ForwardList {
     }
 
     void pop_front() {
-        NodeType* tmp = head_;
-        head_ = head_->next_;
-        delete tmp;
+        if (head_) {
+            NodeType* tmp = head_;
+            head_ = head_->next_;
+            delete tmp;
+        }
     }
 
     void clear() {
@@ -150,6 +152,24 @@ class ForwardList {
 
     const_iterator cend() const {
         return const_iterator(nullptr);
+    }
+
+    void unique() {
+        if (head_) {
+            NodeType* node_prev = head_;
+            NodeType* node_next = head_->next_;
+
+            while (node_next) {
+                if (node_prev->data_ == node_next->data_) {
+                    node_prev->next_ = node_next->next_;
+                    delete node_next;
+                    node_next = node_prev->next_;
+                } else {
+                    node_prev = node_next;
+                    node_next = node_next->next_;
+                }
+            }
+        }
     }
 
     private:
