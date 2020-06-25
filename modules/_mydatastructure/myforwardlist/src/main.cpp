@@ -21,13 +21,14 @@ int main(int argc, char *argv[]) {
     std::cout << (found ? "found" : "not found") << std::endl;
 
     // Template implementation
-
     dslist::ForwardList<int> l;
     l.push_front(1);
     l.push_front(2);
 
-    // Remove after iterator will be implemented
-    l.fwd_list_display();
+    dslist::ForwardList<int>::const_iterator it = l.begin();
+    for (it; it != l.cend(); it++) {
+        std::cout << *it << std::endl;
+    }
 
     return EXIT_SUCCESS;
 }
