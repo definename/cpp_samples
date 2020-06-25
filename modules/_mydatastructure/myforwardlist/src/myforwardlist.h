@@ -113,8 +113,27 @@ class ForwardList {
         head_ = nullptr;
     }
 
+    ~ForwardList() {
+        clear();
+    }
+
     void push_front(const T& val) {
         head_ = new NodeType(val, head_);
+    }
+
+    void pop_front() {
+        NodeType* tmp = head_;
+        head_ = head_->next_;
+        delete tmp;
+    }
+
+    void clear() {
+        NodeType* tmp = nullptr;
+        while (head_) {
+            tmp = head_;
+            head_ = head_->next_;
+            delete tmp;
+        }
     }
 
     iterator begin() {
