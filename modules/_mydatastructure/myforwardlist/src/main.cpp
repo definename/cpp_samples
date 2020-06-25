@@ -5,7 +5,6 @@
 
 #include <forward_list>
 
-
 int main(int argc, char *argv[]) {
     int arr[] = { 1, 22, 33, 44, 55, 66, 77, 88, 99, 100 };
 
@@ -20,39 +19,46 @@ int main(int argc, char *argv[]) {
     // dsutil::FwdNode* found = dsutil::fwd_list_search(head, 77);
     // std::cout << (found ? "found" : "not found") << std::endl;
 
-    // std::forward_list<int> ll;
-    // ll.push_front(1);
-    // ll.push_front(2);
-    // ll.push_front(2);
-    // ll.push_front(3);
-    // ll.push_front(3);
+    {
+        std::forward_list<int> l = {1, 2, 2, 97, 99};
 
-    // ll.reverse();
+        std::forward_list<int> ll = {0, 10, 20};
+        l.merge(ll);
 
-    // std::forward_list<int>::const_iterator it = ll.begin();
-    // for (it; it != ll.end(); ++it) {
-    //     std::cout << *it << std::endl;
-    // }
+        std::forward_list<int>::const_iterator it = l.begin();
+        for (it; it != l.end(); ++it) {
+            std::cout << *it << " ";
+        }
+        std::cout << std::endl;
 
-    // Template implementation
-    dslist::ForwardList<int> l;
-    l.push_front(1);
-    l.push_front(2);
-    l.push_front(2);
-    l.push_front(2);
-    l.push_front(2);
-    l.push_front(3);
-    l.push_front(3);
-
-    l.reverse();
-    // l.unique();
-
-    dslist::ForwardList<int>::const_iterator it = l.begin();
-    for (it; it != l.cend(); it++) {
-        std::cout << *it << " ";
     }
-    std::cout << std::endl;
-    l.pop_front();
+
+    {
+        // My template implementation
+        dslist::ForwardList<int> l;
+        l.push_front(99);
+        l.push_front(97);
+        l.push_front(2);
+        l.push_front(2);
+        l.push_front(1);
+
+        // l.reverse();
+        // l.unique();
+
+        dslist::ForwardList<int> ll;
+        ll.push_front(20);
+        ll.push_front(10);
+        ll.push_front(0);
+
+        l.merge(ll);
+
+        dslist::ForwardList<int>::const_iterator it = l.begin();
+        for (it; it != l.cend(); it++) {
+            std::cout << *it << " ";
+        }
+        std::cout << std::endl;
+        l.pop_front();
+    }
 
     return EXIT_SUCCESS;
 }

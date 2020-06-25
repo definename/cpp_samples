@@ -186,6 +186,31 @@ class ForwardList {
         head_ = mid;
     }
 
+    void merge(ForwardList& other) {
+        while (other.head_ != nullptr) {
+            NodeType* insert = other.head_;
+            other.head_ = other.head_->next_;
+
+            NodeType* dst_prev = nullptr;
+            NodeType* dst_next = head_;
+            while (dst_next && insert->data_ > dst_next->data_) {
+                dst_prev = dst_next;
+                dst_next = dst_next->next_;
+            }
+
+            if (dst_next && dst_prev) {
+                insert->next_ = dst_next;
+                dst_prev->next_ = insert;
+            } else if (dst_next) {
+                insert->next_ = dst_next;
+                head_ = insert;
+            } else {
+                insert->next_ = nullptr;
+                dst_prev->next_ = insert;
+            }
+        }
+    }
+
     private:
     NodeType* head_;
 };
