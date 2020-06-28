@@ -1,6 +1,8 @@
 #ifndef MY_FORWARD_LIST_H
 #define MY_FORWARD_LIST_H
 
+#define USE_FAST_ALGORITM 1
+
 namespace dslist {
 
 template<typename T>
@@ -188,6 +190,68 @@ class ForwardList {
     }
 
     void merge(ForwardList& other) {
+#if USE_FAST_ALGORITM
+        merge_bigO_n_plus_m(other);
+#else
+        merge_bigO_n_square(other);
+#endif
+    }
+
+private:
+    void merge_bigO_n_plus_m(ForwardList& other) {
+        if (!head_) {
+            head_ = other.head_;
+            other.head_ = nullptr;
+            return;
+        }
+
+        if (other.head_) {
+            NodeType* third = nullptr;
+            NodeType* last = nullptr;
+
+            NodeType* first = head_;
+            NodeType* second = other.head_;
+
+            if (first->data_ < second->data_) {
+                third = last = first;
+                first = first->next_;
+            } else {
+                third = last = second;
+                second = second->next_;
+            }
+            last->next_ = nullptr;
+
+            while (first != nullptr && second != nullptr) {
+                if (first->data_ < second->data_) {
+                    last->next_ = first;
+                    last = first;
+                    first = first->next_;
+                } else {
+                    last->next_ = second;
+                    last = second;
+                    second = second->next_;
+                }
+                last->next_ = nullptr;
+            }
+
+            if (first != nullptr) {
+                last->next_ = first;
+            } else {
+                last->next_ = second;
+            }
+
+            head_ = third;
+            other.head_ = nullptr;
+        }
+    }
+
+    void merge_bigO_n_square(ForwardList& other) {
+        if (!head_) {
+            head_ = other.head_;
+            other.head_ = nullptr;
+            return;
+        }
+
         while (other.head_ != nullptr) {
             NodeType* insert = other.head_;
             other.head_ = other.head_->next_;

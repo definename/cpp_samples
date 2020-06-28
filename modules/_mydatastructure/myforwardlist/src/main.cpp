@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
         dslist::ForwardList<int> other;
         other.push_front(20);
         other.push_front(10);
+        other.push_front(2);
         other.push_front(0);
 
         // l.reverse();
@@ -28,21 +29,28 @@ int main(int argc, char *argv[]) {
 
         dslist::ForwardList<int>::const_iterator it = l.begin();
         for (it; it != l.cend(); it++) {
-            std::cout << *it << " ";
+            std::cout << *it << "; ";
         }
         std::cout << std::endl;
     }
 
     {
-        std::forward_list<int> l = {1, 2, 2, 97, 99};
-        std::forward_list<int> other = {0, 10, 20};
-        l.merge(other);
+        // std::forward_list<int> l = {1, 2, 2, 97, 99};
+        // std::forward_list<int> l;
+        // std::forward_list<int> other = {0, 10, 20};
+        // l.merge(other);
 
-        std::forward_list<int>::const_iterator it = l.begin();
-        for (it; it != l.end(); ++it) {
-            std::cout << *it << " ";
-        }
-        std::cout << std::endl;
+        // std::forward_list<int>::const_iterator it = l.begin();
+        // for (it; it != l.end(); ++it) {
+        //     std::cout << *it << " ";
+        // }
+        // std::cout << std::endl;
+
+        // std::forward_list<int>::const_iterator it_other = other.begin();
+        // for (it_other; it_other != other.end(); ++it_other) {
+        //     std::cout << *it << " ";
+        // }
+        // std::cout << std::endl;
     }
     return EXIT_SUCCESS;
 }
