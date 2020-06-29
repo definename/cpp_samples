@@ -15,9 +15,9 @@ class Vector {
     using size_type = std::size_t;
 
     explicit Vector(const size_type size)
-    : reserver_size_(size)
+    : reserved_size_(size)
     , size_(0)
-    , arr_(new T[reserver_size_]) {
+    , arr_(new T[reserved_size_]) {
     }
 
     ~Vector() {
@@ -25,8 +25,8 @@ class Vector {
     }
 
     void push_back(const T& val) {
-        if (reserver_size_ == size_) {
-            reserver_size_ *= 2;
+        if (reserved_size_ == size_) {
+            reserved_size_ *= 2;
             reallocate();
         }
 
@@ -48,8 +48,8 @@ class Vector {
 
     Vector<T>::iterator insert(Vector<T>::iterator it, const T& val) {
         const size_type index = it - arr_;
-        if (reserver_size_ == size_) {
-            reserver_size_ *= 2;
+        if (reserved_size_ == size_) {
+            reserved_size_ *= 2;
             reallocate();
         }
 
@@ -83,7 +83,7 @@ class Vector {
 
     private:
     void reallocate() {
-        T* tmp = new T[reserver_size_];
+        T* tmp = new T[reserved_size_];
         std::memcpy(reinterpret_cast<void*>(tmp),
                     reinterpret_cast<void*>(arr_),
                     (size_) * sizeof(T));
@@ -92,7 +92,7 @@ class Vector {
     }
 
     private:
-    size_type reserver_size_;
+    size_type reserved_size_;
     size_type size_;
     T* arr_;
 };
@@ -128,8 +128,8 @@ class Vector<bool> {
     using size_type = std::size_t;
 
     explicit Vector(const size_type size)
-    : reserver_size_(size)
-    , arr_(new unsigned char[(reserver_size_ + 7) / 8]) {
+    : reserved_size_(size)
+    , arr_(new unsigned char[(reserved_size_ + 7) / 8]) {
     }
 
     ~Vector() {
@@ -150,7 +150,7 @@ class Vector<bool> {
     }
 
     private:
-    size_type reserver_size_;
+    size_type reserved_size_;
     unsigned char* arr_;
 };
 
