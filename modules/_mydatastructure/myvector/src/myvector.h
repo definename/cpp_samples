@@ -14,10 +14,10 @@ class Vector {
     using const_reference = const T&;
     using size_type = std::size_t;
 
-    Vector(const size_type reserver_size) {
-        reserver_size_ = reserver_size;
-        arr_ = new T[reserver_size_];
-        size_ = 0;
+    Vector(const size_type size)
+    : reserver_size_(size)
+    , size_(0)
+    , arr_(new T[reserver_size_]) {
     }
 
     ~Vector() {
@@ -61,7 +61,7 @@ class Vector {
         ++size_;
     }
 
-    int size() const {
+    Vector<T>::size_type size() const {
         return size_;
     }
 
@@ -86,16 +86,15 @@ class Vector {
         T* tmp = new T[reserver_size_];
         std::memcpy(reinterpret_cast<void*>(tmp),
                     reinterpret_cast<void*>(arr_),
-                    reserver_size_ * sizeof(T));
+                    (size_) * sizeof(T));
         delete [] arr_;
         arr_ = tmp;
     }
 
     private:
-    T* arr_;
-    size_type size_;
     size_type reserver_size_;
-    
+    size_type size_;
+    T* arr_;
 };
 
 }
