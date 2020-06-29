@@ -14,7 +14,7 @@ class Vector {
     using const_reference = const T&;
     using size_type = std::size_t;
 
-    Vector(const size_type size)
+    explicit Vector(const size_type size)
     : reserver_size_(size)
     , size_(0)
     , arr_(new T[reserver_size_]) {
@@ -96,6 +96,65 @@ class Vector {
     size_type size_;
     T* arr_;
 };
+
+class VectorBoolProxy {
+    public:
+    VectorBoolProxy(unsigned char& byte_data, unsigned char bit_num)
+    : byte_data_(byte_data)
+    , mask_(1 << bit_num) {
+    }
+
+    operator bool() const {
+        return byte_data_ & mask_;
+    }
+
+    VectorBoolProxy& operator=(const bool is_true) {
+        if (is_true) {
+            byte_data_ = byte_data_ | mask_;
+        } else {
+            byte_data_ = byte_data_ & (~mask_);
+        }
+        return *this;
+    }
+
+    private:
+    unsigned char& byte_data_;
+    unsigned char mask_;
+};
+
+template<>
+class Vector<bool> {
+    public:
+    using size_type = std::size_t;
+
+    explicit Vector(const size_type size)
+    : reserver_size_(size)
+    , arr_(new unsigned char[(reserver_size_ + 7) / 8]) {
+    }
+
+    ~Vector() {
+        delete [] arr_;
+    }
+
+    bool operator[](const int i) const {
+        const unsigned char byte_data = arr_[i / 8];
+        const unsigned char bit_num = i % 8;
+        const unsigned char mask = 1 << bit_num;
+        return byte_data & mask;
+    }
+
+    VectorBoolProxy operator[](const int i) {
+        unsigned char& byte_data = arr_[i / 8];
+        const unsigned char bit_num = i % 8;
+        return { byte_data, bit_num };
+    }
+
+    private:
+    size_type reserver_size_;
+    unsigned char* arr_;
+};
+
+
 
 }
 

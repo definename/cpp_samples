@@ -2,6 +2,7 @@
 #include "myvector.h"
 
 using MyVector = dsvector::Vector<int>;
+using MyVectorBool = dsvector::Vector<bool>;
 
 static void dump_vector(const MyVector& v) {
     MyVector::const_iterator it = v.begin();
@@ -11,32 +12,29 @@ static void dump_vector(const MyVector& v) {
     std::cout << std::endl;
 }
 
-#include <vector>
-
 int main(int argc, char *argv[]) {
-    try
-    {
-        MyVector v(5);
-        v.push_back(1);
-        v.push_back(2);
-        v.push_back(3);
-        v.push_back(4);
-        v.push_back(5);
+    MyVector v(5);
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
 
-        v[0] = 99;
-        std::cout << v[0] << std::endl;
+    v[0] = 99;
+    std::cout << v[0] << std::endl;
 
-        v.insert(v.begin(), 100);
-        std::cout << v[0] << std::endl;
+    v.insert(v.begin(), 100);
+    std::cout << v[0] << std::endl;
 
-        for (int i = 0; i < 11; ++i) {
-            v.push_back(i);
-        }
-
-        dump_vector(v);
+    for (int i = 0; i < 11; ++i) {
+        v.push_back(i);
     }
-    catch(const std::exception& e) {
-        std::cerr << "11:" << e.what() << '\n';
-    }
+
+    dump_vector(v);
+
+    MyVectorBool vb(2);
+    vb[0] = false;
+    vb[1] = true;
+    std::cout << vb[1] << std::endl;
     return EXIT_SUCCESS;
 }
