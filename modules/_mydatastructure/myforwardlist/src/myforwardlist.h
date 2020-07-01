@@ -112,8 +112,8 @@ class ForwardList {
     using NodeType = FwdListNode<T>;
 
     public:
-    ForwardList() {
-        head_ = nullptr;
+    ForwardList()
+    : head_(nullptr) {
     }
 
     ~ForwardList() {
