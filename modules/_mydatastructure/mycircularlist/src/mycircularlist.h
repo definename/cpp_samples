@@ -8,9 +8,9 @@ struct CircularNode {
     using Self = CircularNode<T>;
     using value_type = T;
 
-    CircularNode(const T& data = T(), Self* next = nullptr) {
+    CircularNode(const value_type& data) {
         data_ = data;
-        next_ = next;
+        next_ = nullptr;
     }
 
     value_type data_;

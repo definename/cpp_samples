@@ -7,11 +7,6 @@ using MyCircularType = int;
 using MyCircularList = dscircular::CircularList<MyCircularType>;
 using MyCircularNode = MyCircularList::NodeType;
 
-MyCircularNode* add_node(MyCircularNode** node, const MyCircularType& data) {
-    (*node) = new MyCircularNode(data);
-    return (*node);
-}
-
 void cleanup(MyCircularNode* head) {
     MyCircularNode* tmp = head;
     do {
@@ -33,13 +28,15 @@ void display(MyCircularNode* head) {
 int main(int argc, char *argv[]) {
     MyCircularList l;
 
-    MyCircularNode* head = nullptr;
-    MyCircularNode* tail = add_node(&head, 0);
-    tail = add_node(&tail->next_, 1);
-    tail = add_node(&tail->next_, 2);
-    tail = add_node(&tail->next_, 3);
-    tail = add_node(&tail->next_, 4);
-    tail->next_ = head;
+    MyCircularNode* head = new MyCircularNode(0);
+    head->next_ = head;
+
+    MyCircularNode* tail = head;
+    for (int i = 1; i < 10; ++i) {
+        tail->next_ = new MyCircularNode(i);
+        tail->next_->next_ = head;
+        tail = tail->next_;
+    }
 
     display(head);
     cleanup(head);
