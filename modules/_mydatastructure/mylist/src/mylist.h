@@ -97,6 +97,7 @@ class List {
     }
 
     iterator end() {
+        // TODO: Should not be nullptr
         return iterator(nullptr);
     }
 
