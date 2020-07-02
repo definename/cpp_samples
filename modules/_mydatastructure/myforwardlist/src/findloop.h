@@ -43,15 +43,13 @@ void find_loop_in_linked_list(void) {
         std::cout << "No loop detected" << std::endl;
     }
 
-    // Break loop
-    tail->next_ = nullptr;
-    // Clean up loop
-    LoopList* tmp = nullptr;
-    while (head) {
-        tmp = head;
-        head = head->next_;
-        delete tmp;
-    }
+    // Clean up
+    LoopList* tmp = head;
+    do {
+        LoopList* to_delete = tmp;
+        tmp = tmp->next_;
+        delete to_delete;
+    } while(tmp != head);
 }
 
 #endif
