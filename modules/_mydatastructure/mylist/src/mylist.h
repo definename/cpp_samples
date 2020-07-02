@@ -6,38 +6,84 @@ namespace dslist {
 template<typename T>
 struct ListNode {
     using value_type = T;
-    using _self = ListNode<value_type>;
+    using Self = ListNode<value_type>;
 
-    ListNode(const value_type& value, _self* prev, _self* next)
+    ListNode(const value_type& value, Self* prev, Self* next)
     : value_(value)
     , prev_(prev)
     , next_(next) {
     }
 
     value_type value_;
-    _self* prev_;
-    _self* next_;
+    Self* prev_;
+    Self* next_;
+};
+
+template<typename T>
+struct ListIterator {
+    using NodeType = ListNode<T>;
+
+    using value_type = T;
+    using reference = T&;
+    using Self = ListIterator<value_type>;
+
+    ListIterator(NodeType* node)
+    : node_(node) {
+    }
+
+    reference operator*() {
+        return node_->value_;
+    }
+
+    Self& operator++() {
+        node_ = node_->next_;
+        return *this;
+    }
+
+    Self operator++(int) {
+        Self tmp = *this;
+        node_ = node_->next_;
+        return tmp;
+    }
+
+    bool operator==(const Self& it) {
+        return node_ == it.node_;
+    }
+
+    bool operator!=(const Self& it) {
+        return node_ != it.node_;
+    }
+
+    private:
+    NodeType* node_;
 };
 
 template<typename T>
 class List {
     public:
+    using NodeType = ListNode<T>;
+
     using value_type = T;
-    using NodeType = ListNode<value_type>;
     using size_type = std::size_t;
+    using iterator = ListIterator<value_type>;
 
     public:
     List()
     : node_(nullptr)
+    , tail_(nullptr)
     , size_(0) {
     }
 
     void push_back(const value_type& value) {
-        NodeType* node = new NodeType(value, node_, nullptr);
+        NodeType* node = new NodeType(value, nullptr, nullptr);
         if (node_ == nullptr) {
             node_ = node;
+            tail_ = node_;
         } else {
-            node_->next_ = node;
+            node->next_ = nullptr;
+            node->prev_ = tail_;
+            tail_->next_ = node;
+            tail_= node;
         }
         ++size_;
     }
@@ -46,8 +92,17 @@ class List {
         return size_;
     }
 
+    iterator begin() {
+        return iterator(node_);
+    }
+
+    iterator end() {
+        return iterator(nullptr);
+    }
+
     private:
     NodeType* node_;
+    NodeType* tail_;
     size_type size_;
 };
 
