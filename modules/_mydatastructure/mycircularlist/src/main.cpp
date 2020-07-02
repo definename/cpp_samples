@@ -25,6 +25,27 @@ void display(MyCircularNode* head) {
     std::cout << std::endl;
 }
 
+void insert_before(MyCircularNode* head, const int pos, const MyCircularType& data) {
+    MyCircularNode* to_insert = new MyCircularNode(data);
+    MyCircularNode* tail = head;
+
+    if (pos == 0) {
+        to_insert->next_ = head;
+        while (tail->next_ != head) {
+            tail = tail->next_;
+        }
+        tail->next_ = to_insert;
+    } else {
+        int count = 0;
+        while (count < pos - 1) {
+            tail = tail->next_;
+            ++count;
+        }
+        to_insert->next_ = tail->next_;
+        tail->next_ = to_insert;
+    }
+}
+
 int main(int argc, char *argv[]) {
     MyCircularList l;
 
@@ -39,6 +60,12 @@ int main(int argc, char *argv[]) {
     }
 
     display(head);
+
+    insert_before(head, 3, 99);
+    insert_before(head, 0, 88);
+
+    display(head);
+
     cleanup(head);
 
     return EXIT_SUCCESS;
