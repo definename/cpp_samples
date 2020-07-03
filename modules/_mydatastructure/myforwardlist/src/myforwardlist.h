@@ -7,150 +7,157 @@ namespace dslist {
 
 template<typename T>
 struct FwdListNode {
-    using Self = FwdListNode<T>;
+    using self = FwdListNode<T>;
     using value_type = T;
 
-    FwdListNode(const T& data = T(), Self* next = nullptr) {
-        data_ = data;
-        next_ = next;
+    FwdListNode(const value_type& value = T(), self* next = nullptr)
+    : _value(value)
+    , _next(next) {
     }
 
-    value_type data_;
-    Self* next_;
+    value_type _value;
+    self* _next;
 };
 
 template<typename T>
 struct FwdListIterator {
-    using Self = FwdListIterator<T>;
-    using NodeType = FwdListNode<T>;
-
     using value_type = T;
-    using reference = T&;
-    using pointer = NodeType*;
+    using self = FwdListIterator<value_type>;
+    using node_type = FwdListNode<value_type>;
+    using reference = value_type&;
 
-    explicit FwdListIterator(NodeType* node = nullptr) {
-        node_ = node;
+    explicit FwdListIterator(node_type* node)
+    : _node(node) {
     }
 
     reference operator*() const {
-        return node_->data_;
+        return _node->_value;
     }
 
-    Self& operator++() {
-        node_ = node_->next_;
+    self& operator++() {
+        _node = _node->_next;
         return *this;
     }
 
-    Self operator++(int) {
-        Self tmp = *this;
-        node_ = node_->next_;
+    self operator++(int) {
+        self tmp = *this;
+        _node = _node->_next;
         return tmp;
     }
 
-    bool operator==(const Self& it) const {
-        return node_ == it.node_;
+    bool operator==(const self& it) const {
+        return _node == it._node;
     }
 
-    bool operator!=(const Self& it) const {
-        return node_ != it.node_;
+    bool operator!=(const self& it) const {
+        return _node != it._node;
     }
 
-    NodeType* node_;
+    node_type* _node;
 };
 
 template<typename T>
 struct FwdListConstIterator {
-    using Self = FwdListConstIterator<T>;
-    using NodeType = const FwdListNode<T>;
-    using iterator = FwdListIterator<T>;
-
     using value_type = T;
-    using reference = const T&;
+    using node_type = const FwdListNode<value_type>;
+    using reference = const value_type&;
+    using self = FwdListConstIterator<value_type>;
+    using iterator = FwdListIterator<value_type>;
 
-    explicit FwdListConstIterator(const NodeType* node = nullptr) {
-        node_ = node;
+    explicit FwdListConstIterator(const node_type* node)
+    : _node(node) {
     }
 
-    FwdListConstIterator(const iterator& it) {
-        node_ = it.node_;
+    FwdListConstIterator(const iterator& it)
+    : _node(it._node) {
     }
 
     reference operator*() const {
-        return node_->data_;
+        return _node->_value;
     }
 
-    Self& operator++() {
-        node_ = node_->next_;
+    self& operator++() {
+        _node = _node->_next;
         return *this;
     }
 
-    Self operator++(int) {
-        Self tmp = *this;
-        node_ = node_->next_;
+    self operator++(int) {
+        self tmp = *this;
+        _node = _node->_next;
         return tmp;
     }
 
-    bool operator==(const Self& it) const {
-        return node_ == it.node_;
+    bool operator==(const self& it) const {
+        return _node == it._node;
     }
 
-    bool operator!=(const Self& it) const {
-        return node_ != it.node_;
+    bool operator!=(const self& it) const {
+        return _node != it._node;
     }
 
-    NodeType* node_;
+    const node_type* _node;
 };
 
 template<typename T>
 class ForwardList {
     public:
     using value_type = T;
-    using iterator = FwdListIterator<T>;
-    using const_iterator = FwdListConstIterator<T>;
-
-    private:
-    using NodeType = FwdListNode<T>;
+    using node_type = FwdListNode<value_type>;
+    using iterator = FwdListIterator<value_type>;
+    using const_iterator = FwdListConstIterator<value_type>;
 
     public:
     ForwardList()
-    : head_(nullptr) {
+    : _head(nullptr) {
     }
 
     ~ForwardList() {
         clear();
     }
 
+    bool empty() const {
+        return begin() == end();
+    }
+
     void push_front(const T& val) {
-        head_ = new NodeType(val, head_);
+        _head = new node_type(val, _head);
     }
 
     void pop_front() {
-        if (head_) {
-            NodeType* tmp = head_;
-            head_ = head_->next_;
+        if (_head) {
+            node_type* tmp = _head;
+            _head = _head->_next;
             delete tmp;
         }
     }
 
     void clear() {
-        NodeType* tmp = nullptr;
-        while (head_) {
-            tmp = head_;
-            head_ = head_->next_;
+        node_type* tmp = nullptr;
+        while (!empty()) {
+            tmp = _head;
+            _head = _head->_next;
             delete tmp;
         }
     }
 
     iterator begin() {
-        return iterator(head_);
+        return iterator(_head);
     }
 
-    const_iterator cbegin() const {
-        return const_iterator(head_);
+    const_iterator begin() const {
+        return const_iterator(_head);
     }
 
     iterator end() {
         return iterator(nullptr);
+    }
+
+    const_iterator end() const {
+        return const_iterator(nullptr);
+    }
+
+    const_iterator cbegin() const {
+        return const_iterator(_head);
     }
 
     const_iterator cend() const {
@@ -158,35 +165,35 @@ class ForwardList {
     }
 
     void unique() {
-        if (head_) {
-            NodeType* node_prev = head_;
-            NodeType* node_next = head_->next_;
+        if (_head) {
+            node_type* node_prev = _head;
+            node_type* node_next = _head->_next;
 
             while (node_next) {
-                if (node_prev->data_ == node_next->data_) {
-                    node_prev->next_ = node_next->next_;
+                if (node_prev->_value == node_next->_value) {
+                    node_prev->_next = node_next->_next;
                     delete node_next;
-                    node_next = node_prev->next_;
+                    node_next = node_prev->_next;
                 } else {
                     node_prev = node_next;
-                    node_next = node_next->next_;
+                    node_next = node_next->_next;
                 }
             }
         }
     }
 
     void reverse() {
-        NodeType* head = head_;
-        NodeType* mid = nullptr, *tail = nullptr;
+        node_type* head = _head;
+        node_type* mid = nullptr, *tail = nullptr;
 
         while (head) {
             tail = mid;
             mid = head;
-            head = head->next_;
+            head = head->_next;
 
-            mid->next_ = tail;
+            mid->_next = tail;
         }
-        head_ = mid;
+        _head = mid;
     }
 
     void merge(ForwardList& other) {
@@ -199,85 +206,85 @@ class ForwardList {
 
 private:
     void merge_bigO_n_plus_m(ForwardList& other) {
-        if (!head_) {
-            head_ = other.head_;
-            other.head_ = nullptr;
+        if (!_head) {
+            _head = other._head;
+            other._head = nullptr;
             return;
         }
 
-        if (other.head_) {
-            NodeType* third = nullptr;
-            NodeType* last = nullptr;
+        if (other._head) {
+            node_type* third = nullptr;
+            node_type* last = nullptr;
 
-            NodeType* first = head_;
-            NodeType* second = other.head_;
+            node_type* first = _head;
+            node_type* second = other._head;
 
-            if (first->data_ < second->data_) {
+            if (first->_value < second->_value) {
                 third = last = first;
-                first = first->next_;
+                first = first->_next;
             } else {
                 third = last = second;
-                second = second->next_;
+                second = second->_next;
             }
-            last->next_ = nullptr;
+            last->_next = nullptr;
 
             while (first != nullptr && second != nullptr) {
-                if (first->data_ < second->data_) {
-                    last->next_ = first;
+                if (first->_value < second->_value) {
+                    last->_next = first;
                     last = first;
-                    first = first->next_;
+                    first = first->_next;
                 } else {
-                    last->next_ = second;
+                    last->_next = second;
                     last = second;
-                    second = second->next_;
+                    second = second->_next;
                 }
-                last->next_ = nullptr;
+                last->_next = nullptr;
             }
 
             if (first != nullptr) {
-                last->next_ = first;
+                last->_next = first;
             } else {
-                last->next_ = second;
+                last->_next = second;
             }
 
-            head_ = third;
-            other.head_ = nullptr;
+            _head = third;
+            other._head = nullptr;
         }
     }
 
     void merge_bigO_n_square(ForwardList& other) {
-        if (!head_) {
-            head_ = other.head_;
-            other.head_ = nullptr;
+        if (!_head) {
+            _head = other._head;
+            other._head = nullptr;
             return;
         }
 
-        while (other.head_ != nullptr) {
-            NodeType* insert = other.head_;
-            other.head_ = other.head_->next_;
+        while (other._head != nullptr) {
+            node_type* insert = other._head;
+            other._head = other._head->_next;
 
-            NodeType* dst_prev = nullptr;
-            NodeType* dst_next = head_;
-            while (dst_next && insert->data_ > dst_next->data_) {
+            node_type* dst_prev = nullptr;
+            node_type* dst_next = _head;
+            while (dst_next && insert->_value > dst_next->_value) {
                 dst_prev = dst_next;
-                dst_next = dst_next->next_;
+                dst_next = dst_next->_next;
             }
 
             if (dst_next && dst_prev) {
-                insert->next_ = dst_next;
-                dst_prev->next_ = insert;
+                insert->_next = dst_next;
+                dst_prev->_next = insert;
             } else if (dst_next) {
-                insert->next_ = dst_next;
-                head_ = insert;
+                insert->_next = dst_next;
+                _head = insert;
             } else {
-                insert->next_ = nullptr;
-                dst_prev->next_ = insert;
+                insert->_next = nullptr;
+                dst_prev->_next = insert;
             }
         }
     }
 
     private:
-    NodeType* head_;
+    node_type* _head;
 };
 
 }

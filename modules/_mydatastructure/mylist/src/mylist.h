@@ -199,6 +199,14 @@ class List {
         return const_iterator(_tail);
     }
 
+    const_iterator cbegin() const {
+        return const_iterator(_head->_next);
+    }
+
+    const_iterator cend() const {
+        return const_iterator(_tail);
+    }
+
     void clear() {
         node_type* tmp = nullptr;
         while (!empty()) {

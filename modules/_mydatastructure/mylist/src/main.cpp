@@ -37,5 +37,11 @@ int main(int argc, char *argv[]) {
     }
     std::cout << std::endl;
 
+    // Const iterator(cbegin)
+    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
     return EXIT_SUCCESS;
 }
