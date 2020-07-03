@@ -6,105 +6,122 @@ namespace dslist {
 template<typename T>
 struct ListNode {
     using value_type = T;
-    using Self = ListNode<value_type>;
+    using self = ListNode<value_type>;
 
-    ListNode(const value_type& value, Self* prev, Self* next)
-    : value_(value)
-    , prev_(prev)
-    , next_(next) {
+    ListNode(const value_type& value = T(), self* prev = nullptr, self* next = nullptr)
+    : _value(value)
+    , _prev(prev)
+    , _next(next) {
     }
 
-    value_type value_;
-    Self* prev_;
-    Self* next_;
+    value_type _value;
+    self* _prev;
+    self* _next;
 };
 
 template<typename T>
 struct ListIterator {
-    using NodeType = ListNode<T>;
-
     using value_type = T;
-    using reference = T&;
-    using Self = ListIterator<value_type>;
+    using node_type = ListNode<value_type>;
+    using reference = value_type&;
+    using self = ListIterator<value_type>;
 
-    ListIterator(NodeType* node)
-    : node_(node) {
+    ListIterator(node_type* node)
+    : _node(node) {
     }
 
     reference operator*() {
-        return node_->value_;
+        return _node->_value;
     }
 
-    Self& operator++() {
-        node_ = node_->next_;
+    self& operator++() {
+        if (_node->_next != nullptr) {
+            _node = _node->_next;
+        }
         return *this;
     }
 
-    Self operator++(int) {
-        Self tmp = *this;
-        node_ = node_->next_;
+    self operator++(int) {
+        self tmp = *this;
+        if (_node->_next != nullptr) {
+            _node = _node->_next;
+        }
         return tmp;
     }
 
-    bool operator==(const Self& it) {
-        return node_ == it.node_;
+    self& operator--() {
+        if (_node->_prev != nullptr) {
+            _node = _node->_prev;
+        }
+        return *this;
     }
 
-    bool operator!=(const Self& it) {
-        return node_ != it.node_;
+    self operator--(int) {
+        self tmp = *this;
+        if (_node->_prev != nullptr) {
+            _node = _node->_prev;
+        }
+        return tmp;
+    }
+
+    bool operator==(const self& it) {
+        return _node == it._node;
+    }
+
+    bool operator!=(const self& it) {
+        return _node != it._node;
     }
 
     private:
-    NodeType* node_;
+    node_type* _node;
 };
 
 template<typename T>
 class List {
     public:
-    using NodeType = ListNode<T>;
-
     using value_type = T;
+    using node_type = ListNode<value_type>;
     using size_type = std::size_t;
     using iterator = ListIterator<value_type>;
 
     public:
     List()
-    : node_(nullptr)
-    , tail_(nullptr)
-    , size_(0) {
+    : _size(0) {
+        _head = new node_type();
+        _tail = new node_type();
+
+        _head->_next = _tail;
+        _tail->_prev = _head;
     }
 
     void push_back(const value_type& value) {
-        NodeType* node = new NodeType(value, nullptr, nullptr);
-        if (node_ == nullptr) {
-            node_ = node;
-            tail_ = node_;
-        } else {
-            node->next_ = nullptr;
-            node->prev_ = tail_;
-            tail_->next_ = node;
-            tail_= node;
-        }
-        ++size_;
+        node_type* new_node = new node_type(value);
+
+        new_node->_prev = _tail->_prev;
+        new_node->_next = _tail;
+
+        _tail->_prev->_next = new_node;
+        _tail->_prev = new_node;
+
+        ++_size;
     }
 
     size_type size() const {
-        return size_;
+        return _size;
     }
 
     iterator begin() {
-        return iterator(node_);
+        return iterator(_head->_next);
     }
 
     iterator end() {
-        // TODO: Should not be nullptr
-        return iterator(nullptr);
+        return iterator(_tail);
     }
 
     private:
-    NodeType* node_;
-    NodeType* tail_;
-    size_type size_;
+    node_type* _head;
+    node_type* _tail;
+    size_type _size;
 };
 
 }
