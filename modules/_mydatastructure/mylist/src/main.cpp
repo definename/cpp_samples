@@ -16,11 +16,13 @@ int main(int argc, char *argv[]) {
     l.push_back(12);
     l.push_back(14);
 
+    // Iterator
     for (MyList::iterator it = l.begin(); it != l.end(); ++it) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
 
+    // Bidirection iterator
     MyList::iterator it = l.end();
     for (it; it != l.begin(); it--) {
         if (it != l.end()) {
@@ -28,6 +30,12 @@ int main(int argc, char *argv[]) {
         }
     }
     std::cout << *it << std::endl;
+
+    // Const iterator
+    for (MyList::const_iterator it = l.begin(); it != l.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }

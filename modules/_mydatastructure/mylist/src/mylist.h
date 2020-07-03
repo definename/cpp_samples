@@ -26,7 +26,7 @@ struct ListIterator {
     using reference = value_type&;
     using self = ListIterator<value_type>;
 
-    ListIterator(node_type* node)
+    explicit ListIterator(node_type* node)
     : _node(node) {
     }
 
@@ -64,16 +64,76 @@ struct ListIterator {
         return tmp;
     }
 
-    bool operator==(const self& it) {
+    bool operator==(const self& it) const {
         return _node == it._node;
     }
 
-    bool operator!=(const self& it) {
+    bool operator!=(const self& it) const {
         return _node != it._node;
     }
 
-    private:
     node_type* _node;
+};
+
+template<typename T>
+struct ListConstIterator {
+    using value_type = T;
+    using node_type = const ListNode<value_type>;
+    using reference = const value_type&;
+    using self = ListConstIterator<value_type>;
+    using iterator = ListIterator<value_type>;
+
+    explicit ListConstIterator(const node_type* node)
+    : _node(node) {
+    }
+
+    ListConstIterator(const iterator& it)
+    : _node(it._node) {
+    }
+
+    reference operator*() {
+        return _node->_value;
+    }
+
+    self& operator++() {
+        if (_node->_next != nullptr) {
+            _node = _node->_next;
+        }
+        return *this;
+    }
+
+    self operator++(int) {
+        self tmp = *this;
+        if (_node->_next != nullptr) {
+            _node = _node->_next;
+        }
+        return tmp;
+    }
+
+    self& operator--() {
+        if (_node->_prev != nullptr) {
+            _node = _node->_prev;
+        }
+        return *this;
+    }
+
+    self operator--(int) {
+        self tmp = *this;
+        if (_node->_prev != nullptr) {
+            _node = _node->_prev;
+        }
+        return tmp;
+    }
+
+    bool operator==(const self& it) const {
+        return _node == it._node;
+    }
+
+    bool operator!=(const self& it) const {
+        return _node != it._node;
+    }
+
+    const node_type* _node;
 };
 
 template<typename T>
@@ -83,6 +143,7 @@ class List {
     using node_type = ListNode<value_type>;
     using size_type = std::size_t;
     using iterator = ListIterator<value_type>;
+    using const_iterator = ListConstIterator<value_type>;
 
     public:
     List()
@@ -92,6 +153,14 @@ class List {
 
         _head->_next = _tail;
         _tail->_prev = _head;
+    }
+
+    ~List() {
+        clear();
+        delete _head;
+        _head = nullptr;
+        delete _tail;
+        _tail = nullptr;
     }
 
     void push_back(const value_type& value) {
@@ -106,6 +175,10 @@ class List {
         ++_size;
     }
 
+    bool empty() const {
+        return begin() == end();
+    }
+
     size_type size() const {
         return _size;
     }
@@ -114,8 +187,27 @@ class List {
         return iterator(_head->_next);
     }
 
+    const_iterator begin() const {
+        return const_iterator(_head->_next);
+    }
+
     iterator end() {
         return iterator(_tail);
+    }
+
+    const_iterator end() const {
+        return const_iterator(_tail);
+    }
+
+    void clear() {
+        node_type* tmp = nullptr;
+        while (!empty()) {
+            tmp = _head->_next;
+            _head->_next = tmp->_next;
+            _head->_next->_prev = _head;
+            delete tmp;
+            --_size;
+        }
     }
 
     private:
