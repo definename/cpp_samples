@@ -1,6 +1,8 @@
 #include <iostream>
 #include "mylist.h"
+
 #include <list>
+#include <algorithm>
 
 using MyListType = int;
 using MyList = dslist::List<MyListType>;
@@ -42,6 +44,14 @@ int main(int argc, char *argv[]) {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
+
+    // Inline with stl algorithms
+    auto found = std::find(l.begin(), l.end(), 12);
+    if (found == l.end()) {
+        std::cout << "not found" << std::endl;
+    } else {
+        std::cout << *found << std::endl;
+    }
 
     return EXIT_SUCCESS;
 }

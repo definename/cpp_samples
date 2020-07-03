@@ -21,9 +21,14 @@ struct ListNode {
 
 template<typename T>
 struct ListIterator {
+    // To be inline with stl algorithms
+    using difference_type = ptrdiff_t;
     using value_type = T;
-    using node_type = ListNode<value_type>;
+    using pointer = value_type*;
     using reference = value_type&;
+    using iterator_category = std::bidirectional_iterator_tag;
+
+    using node_type = ListNode<value_type>;
     using self = ListIterator<value_type>;
 
     explicit ListIterator(node_type* node)
@@ -77,13 +82,18 @@ struct ListIterator {
 
 template<typename T>
 struct ListConstIterator {
+    // To be inline with stl algorithms
+    using difference_type = ptrdiff_t;
     using value_type = T;
-    using node_type = const ListNode<value_type>;
+    using pointer = const value_type*;
     using reference = const value_type&;
-    using self = ListConstIterator<value_type>;
-    using iterator = ListIterator<value_type>;
+    using iterator_category = std::bidirectional_iterator_tag;
 
-    explicit ListConstIterator(const node_type* node)
+    using iterator = ListIterator<value_type>;
+    using self = ListConstIterator<value_type>;
+    using node_type = const ListNode<value_type>;
+
+    explicit ListConstIterator(node_type* node)
     : _node(node) {
     }
 
@@ -133,7 +143,7 @@ struct ListConstIterator {
         return _node != it._node;
     }
 
-    const node_type* _node;
+    node_type* _node;
 };
 
 template<typename T>
