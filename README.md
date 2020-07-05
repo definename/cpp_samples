@@ -7,3 +7,8 @@
 # Draw UML
 
 [Msc-generator](https://sites.google.com/site/mscgen2393/) - Msc-generator is a tool that draws Message Sequence Charts or generic Graphs from textual descriptions.
+
+Online code:
+
+[https://codeinterview.io/](codeinterview)
+[https://leetcode.com/](leetcode)
