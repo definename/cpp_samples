@@ -18,8 +18,8 @@ void find_loop_in_linked_list(void) {
 
     // Create loop
     auto head = new LoopList(1);
-    auto tail = add_node(&head->_next, 1);
-    for (int i = tail->_value; i < 10; ++i) {
+    LoopList* tail = head;
+    for (int i = 1; i < 11; ++i) {
         tail = add_node(&tail->_next, i);
     }
     tail->_next = head;
@@ -27,7 +27,7 @@ void find_loop_in_linked_list(void) {
     // Find loop
     auto slow = head;
     auto fast = slow->_next;
-    while (fast != nullptr) {
+    while (fast != nullptr && fast->_next != nullptr) {
         fast = fast->_next;
         if (slow == fast) {
             is_loop = true;
@@ -39,17 +39,20 @@ void find_loop_in_linked_list(void) {
 
     if (is_loop) {
         std::cout << "Loop detected at:" << slow->_value << std::endl;
+        LoopList* tmp = head;
+        do {
+            LoopList* to_delete = tmp;
+            tmp = tmp->_next;
+            delete to_delete;
+        } while(tmp != head);
     } else {
         std::cout << "No loop detected" << std::endl;
+        while (head != nullptr) {
+            LoopList* tmp = head;
+            head = head->_next;
+            delete tmp;
+        }
     }
-
-    // Clean up
-    LoopList* tmp = head;
-    do {
-        LoopList* to_delete = tmp;
-        tmp = tmp->_next;
-        delete to_delete;
-    } while(tmp != head);
 }
 
 #endif
