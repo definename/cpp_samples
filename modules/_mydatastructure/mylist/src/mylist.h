@@ -169,6 +169,7 @@ class List {
         clear();
         delete _head;
         _head = nullptr;
+
         delete _tail;
         _tail = nullptr;
     }
@@ -205,31 +206,7 @@ class List {
         return const_iterator(_tail);
     }
 
-    void clear() {
-        node_type* tmp = nullptr;
-        while (!empty()) {
-            tmp = _head->_next;
-            _head->_next = tmp->_next;
-            _head->_next->_prev = _head;
-            delete tmp;
-            --_size;
-        }
-    }
-
     iterator insert(iterator pos, const value_type& value) {
-        return insert_before_position(pos, value);
-    }
-
-    void push_back(const value_type& value) {
-        insert_before_position(end(), value);
-    }
-
-    void push_front(const value_type& value) {
-        insert_before_position(begin(), value);
-    }
-
-    private:
-    iterator insert_before_position(iterator pos, const value_type& value) {
         node_type* new_node = new node_type(value);
         node_type* pos_node = pos._node;
 
@@ -242,6 +219,45 @@ class List {
         ++_size;
 
         return iterator(new_node);
+    }
+
+    void push_back(const value_type& value) {
+        insert(end(), value);
+    }
+
+    void push_front(const value_type& value) {
+        insert(begin(), value);
+    }
+
+    iterator erase(iterator pos) {
+        iterator ret = pos;
+        if (ret != end()) {
+            node_type* pos_node = pos._node;
+
+            ret = iterator(pos_node->_next);
+
+            pos_node->_prev->_next = pos_node->_next;
+            pos_node->_next->_prev = pos_node->_prev;
+
+            delete pos_node;
+            --_size;
+        }
+        return ret;
+    }
+
+    void clear() {
+        iterator it = begin();
+        while (it != end()) {
+            it = erase(it);
+        }
+    }
+
+    void pop_back() {
+        erase(iterator(--end()));
+    }
+
+    void pop_front() {
+        erase(iterator(begin()));
     }
 
     private:

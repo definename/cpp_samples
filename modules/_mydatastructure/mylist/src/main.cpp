@@ -3,9 +3,17 @@
 
 #include <list>
 #include <algorithm>
+#include <cassert>
 
 using MyListType = int;
 using MyList = dslist::List<MyListType>;
+
+void dump(MyList& l) {
+    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
+        std::cout << *it << "-";
+    }
+    std::cout << std::endl;
+}
 
 int main(int argc, char *argv[]) {
     MyList l;
@@ -55,32 +63,38 @@ int main(int argc, char *argv[]) {
 
     // Insert
     std::cout << "inserted at:" << *l.insert(found, 10) << std::endl;
-
-    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
-        std::cout << *it << "-";
-    }
-    std::cout << std::endl;
+    dump(l);
 
     // Push front
     l.push_front(2);
     l.push_front(1);
+    dump(l);
 
-    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
-        std::cout << *it << "-";
+    // Erase at position
+    std::cout << "removed before:" << *l.erase(l.begin()) << std::endl;
+    assert(l.erase(l.end()) == l.end());
+    dump(l);
+
+    // Pop back
+    l.pop_back();
+    dump(l);
+
+    // Pop front
+    l.pop_front();
+    dump(l);
+
+    {
+        // std::list<int> l;
+        // l.pop_back();
+        // auto it = std::find(l.begin(), l.end(), 4);
+        // it = l.insert(it, 99);
+        // for (const auto& v: l) {
+        //     std::cout << v << " ";
+        // }
+        // std::cout << std::endl;
+
+        // std::cout << *it << std::endl;
     }
-    std::cout << std::endl;
-
-    // {
-    //     std::list<int> l{1, 2, 3, 4};
-    //     auto it = std::find(l.begin(), l.end(), 4);
-    //     it = l.insert(it, 99);
-    //     for (const auto& v: l) {
-    //         std::cout << v << " ";
-    //     }
-    //     std::cout << std::endl;
-
-    //     std::cout << *it << std::endl;
-    // }
 
     return EXIT_SUCCESS;
 }
