@@ -221,7 +221,11 @@ class List {
     }
 
     void push_back(const value_type& value) {
-        insert_before_position(iterator(_tail), value);
+        insert_before_position(end(), value);
+    }
+
+    void push_front(const value_type& value) {
+        insert_before_position(begin(), value);
     }
 
     private:

@@ -53,7 +53,17 @@ int main(int argc, char *argv[]) {
         std::cout << "found:" << *found << std::endl;
     }
 
+    // Insert
     std::cout << "inserted at:" << *l.insert(found, 10) << std::endl;
+
+    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
+        std::cout << *it << "-";
+    }
+    std::cout << std::endl;
+
+    // Push front
+    l.push_front(2);
+    l.push_front(1);
 
     for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
         std::cout << *it << "-";
