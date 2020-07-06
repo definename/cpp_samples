@@ -83,18 +83,9 @@ int main(int argc, char *argv[]) {
     l.pop_front();
     dump(l);
 
-    {
-        // std::list<int> l;
-        // l.pop_back();
-        // auto it = std::find(l.begin(), l.end(), 4);
-        // it = l.insert(it, 99);
-        // for (const auto& v: l) {
-        //     std::cout << v << " ";
-        // }
-        // std::cout << std::endl;
-
-        // std::cout << *it << std::endl;
-    }
+    // Reverse
+    l.reverse();
+    dump(l);
 
     return EXIT_SUCCESS;
 }

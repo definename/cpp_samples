@@ -260,6 +260,20 @@ class List {
         erase(iterator(begin()));
     }
 
+    void reverse() {
+        node_type* cur = _head;
+        _tail = cur;
+        while(cur) {
+            node_type* tmp = cur->_next;
+            cur->_next = cur->_prev;
+            cur->_prev = tmp;
+            cur = cur->_prev;
+            if (cur != nullptr && cur->_next == nullptr) {
+                _head = cur;
+            }
+        }
+    }
+
     private:
     node_type* _head;
     node_type* _tail;
