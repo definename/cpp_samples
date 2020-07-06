@@ -46,12 +46,31 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl;
 
     // Inline with stl algorithms
-    auto found = std::find(l.begin(), l.end(), 12);
+    auto found = std::find(l.begin(), l.end(), 11);
     if (found == l.end()) {
         std::cout << "not found" << std::endl;
     } else {
-        std::cout << *found << std::endl;
+        std::cout << "found:" << *found << std::endl;
     }
+
+    std::cout << "inserted at:" << *l.insert(found, 10) << std::endl;
+
+    for (MyList::const_iterator it = l.cbegin(); it != l.cend(); ++it) {
+        std::cout << *it << "-";
+    }
+    std::cout << std::endl;
+
+    // {
+    //     std::list<int> l{1, 2, 3, 4};
+    //     auto it = std::find(l.begin(), l.end(), 4);
+    //     it = l.insert(it, 99);
+    //     for (const auto& v: l) {
+    //         std::cout << v << " ";
+    //     }
+    //     std::cout << std::endl;
+
+    //     std::cout << *it << std::endl;
+    // }
 
     return EXIT_SUCCESS;
 }

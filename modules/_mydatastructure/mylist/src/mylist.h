@@ -173,18 +173,6 @@ class List {
         _tail = nullptr;
     }
 
-    void push_back(const value_type& value) {
-        node_type* new_node = new node_type(value);
-
-        new_node->_prev = _tail->_prev;
-        new_node->_next = _tail;
-
-        _tail->_prev->_next = new_node;
-        _tail->_prev = new_node;
-
-        ++_size;
-    }
-
     bool empty() const {
         return begin() == end();
     }
@@ -226,6 +214,30 @@ class List {
             delete tmp;
             --_size;
         }
+    }
+
+    iterator insert(iterator pos, const value_type& value) {
+        return insert_before_position(pos, value);
+    }
+
+    void push_back(const value_type& value) {
+        insert_before_position(iterator(_tail), value);
+    }
+
+    private:
+    iterator insert_before_position(iterator pos, const value_type& value) {
+        node_type* new_node = new node_type(value);
+        node_type* pos_node = pos._node;
+
+        new_node->_prev = pos_node->_prev;
+        new_node->_next = pos_node;
+
+        pos_node->_prev->_next = new_node;
+        pos_node->_prev = new_node;
+
+        ++_size;
+
+        return iterator(new_node);
     }
 
     private:
