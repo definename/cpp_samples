@@ -11,12 +11,12 @@ void PRINT_COLLECTION(const T& cont) {
 	std::cout << ss.str() << std::endl;
 }
 
-using Coll = std::list<int>;
+using IntList = std::list<int>;
 
 int main()
 {
-	Coll coll1 = { 1, 2, 99, 12, 43, 221, 87 };
-	Coll coll2 = { 1, 66, 23, 2, 99, 12, 43, 221, 87 , 999 };
+	IntList coll1{ 1, 2, 99, 12, 43, 221, 87 };
+	IntList coll2{ 1, 66, 23, 2, 99, 12, 43, 221, 87 , 999 };
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,8 @@ int main()
 	PRINT_COLLECTION(coll2);
 
 	for (const auto &val : coll2) {
-		coll1.insert(std::lower_bound(coll1.begin(), coll1.end(), val), val);
+		auto it = std::lower_bound(coll1.begin(), coll1.end(), val);
+		coll1.insert(it, val);
 	}
 
 	PRINT_COLLECTION(coll1);
