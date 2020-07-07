@@ -1,22 +1,22 @@
 #include <iostream>
+#include <cassert>
+    #include <forward_list>
 #include "myforwardlist.h"
-#include "findloop.h"
+#include "findlistloop.h"
+#include "findlistmiddle.h"
 
 using MyForwarListType = int;
 using MyForwarList = dslist::ForwardList<MyForwarListType>;
 
-#include <forward_list>
 
 int main(int argc, char *argv[]) {
 
+    find_middle_element_in_forward_list();
     find_loop_in_linked_list();
 
     {
         MyForwarList l;
-
-        if (l.empty()) {
-            std::cout << "empty" << std::endl;
-        }
+        assert(l.empty());
 
         l.push_front(99);
         l.push_front(97);

@@ -1,0 +1,6 @@
+#ifndef FIND_MIDDLE_ELEMENT_IN_FORWARD_LIST_H
+#define FIND_MIDDLE_ELEMENT_IN_FORWARD_LIST_H
+
+void find_middle_element_in_forward_list(void);
+
+#endif
