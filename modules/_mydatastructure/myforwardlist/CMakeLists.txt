@@ -7,7 +7,6 @@ set(SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/src)
 set(FORWARD_LIST_TRICKS
     ${TRICKS_DIR}/findlistloop.cpp
     ${TRICKS_DIR}/findlistmiddle.cpp
-    ${TRICKS_DIR}/forwardlistutil.cpp
     )
 
 set(PROJECT_SOURCES
