@@ -2,6 +2,37 @@
 #include <thread>
 #include <condition_variable>
 
+class A {
+	public:
+	char i;
+	virtual ~A() {}
+};
+
+class B: public A {
+	public:
+	char i;
+};
+
+class C: public B {
+	public:
+	char i;
+};
+
+class F {
+	public:
+	char i;
+};
+
+class E: public F {
+	public:
+	char i;
+};
+
+class D: public C, public E {
+	public:
+	char i;
+};
+
 std::mutex _m;
 std::condition_variable_any _cv;
 bool _ready = false;
@@ -28,5 +59,14 @@ int main(int argc, char* argv[]) {
 	std::thread t2(handle_trigger);
 	t1.join();
 	t2.join();
+
+	A *a1 = new C;
+	A *a2 = new D;
+
+	B* b1 = dynamic_cast<B*>(a1);
+	{
+		B* b1 = static_cast<B*>(a1);
+	}
+
 	return EXIT_SUCCESS;
 }
