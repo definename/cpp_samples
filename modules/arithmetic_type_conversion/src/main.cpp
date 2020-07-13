@@ -60,5 +60,25 @@ int main(int argc, char* argv[])
 		std::cout << x + y << std::endl;
 	}
 
+	{
+		unsigned char limit = 150;
+
+		// unsigned char i will never be more than 255 - INFINITE LOOP OBSERVED!!!
+
+		// for(unsigned char i = 0; i < 2 * limit; ++i) {
+		// 	std::cout << (int)i << " ";
+		// }
+	}
+
+	{
+		unsigned char i = 300;
+		// unsigned char i will have value 44
+		assert(i == 44);
+		// value of unsigned char i less than 200
+		if (i > 200) {
+			std::cout << "WILL NEVER BE CALLED" << std::endl;
+		}
+	}
+
 	return 0;
 }
