@@ -12,5 +12,5 @@
 # Online code:
 
 - [codeinterview](https://codeinterview.io/)
-- [https://leetcode.com/](leetcode)
-- [http://collabedit.com/](collabedit)
+- [leetcode](https://leetcode.com/)
+- [collabedit](http://collabedit.com/)
