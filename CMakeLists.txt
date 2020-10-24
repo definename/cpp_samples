@@ -8,7 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 if (UNIX)
 	# Set C++ standard features
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-	set(CMAKE_CXX_STANDARD 17)
+	set(CMAKE_CXX_STANDARD 11)
 	message(STATUS "Host is Unix like: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_VERSION}")
 else()
 	cmake_minimum_required(VERSION 3.13.1)

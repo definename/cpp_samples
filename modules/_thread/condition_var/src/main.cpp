@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
 void Waiter() {
 	while (true) {
-		std::unique_lock l(mutex_);
+		std::unique_lock<std::mutex> l(mutex_);
 		cv_.wait(l, []() { return done_; });
 
 		{
@@ -53,7 +53,7 @@ void Waiter() {
 void Cook() {
 	while (true) {
 		{
-			std::unique_lock l(mutex_);
+			std::unique_lock<std::mutex> l(mutex_);
 			if (!cv_.wait_for(l, std::chrono::seconds(1), []() { return !done_; })) {
 				std::cout << "Is not eaten!!" << std::endl;
 				continue;

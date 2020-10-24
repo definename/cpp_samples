@@ -6,8 +6,8 @@
 std::mutex mutex_a;
 std::mutex mutex_b;
 
-std::atomic<bool> ready_a = false;
-std::atomic<bool> ready_b = false;
+std::atomic<bool> ready_a(false);
+std::atomic<bool> ready_b(false);
 
 void resource_A(void) {
 	std::lock_guard<std::mutex> l(mutex_a);

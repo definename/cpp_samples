@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <limits>
 
 int main(int argc, char* argv[])
 {

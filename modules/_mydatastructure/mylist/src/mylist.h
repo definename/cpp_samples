@@ -22,7 +22,7 @@ struct ListNode {
 template<typename T>
 struct ListIterator {
     // To be inline with stl algorithms
-    using difference_type = ptrdiff_t;
+    using difference_type = std::ptrdiff_t;
     using value_type = T;
     using pointer = value_type*;
     using reference = value_type&;
@@ -83,7 +83,7 @@ struct ListIterator {
 template<typename T>
 struct ListConstIterator {
     // To be inline with stl algorithms
-    using difference_type = ptrdiff_t;
+    using difference_type = std::ptrdiff_t;
     using value_type = T;
     using pointer = const value_type*;
     using reference = const value_type&;

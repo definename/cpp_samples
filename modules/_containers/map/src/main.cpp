@@ -4,11 +4,16 @@
 #include <numeric>
 #include <sstream>
 
+#define CPP98_03_SUPPORT 199711L
+#define CPP11_SUPPORT 201103L
+#define CPP14_SUPPORT 201402L
+#define CPP17_SUPPORT 201703L
+
 template <typename T>
 void PRINT_MAP(const T& cont) {
 	std::ostringstream ss;
-	for (const auto& [key, value] : cont) {
-		ss << key << " " << value << " ";
+	for (const auto& entry: cont) {
+		ss << entry.first << " " << entry.second << " ";
 	}
 	std::cout << ss.str() << std::endl;
 }
@@ -35,6 +40,7 @@ int main()
 		std::cout << "Value sum: ", std::accumulate(coll.begin(), coll.end(), 0, op);
 	}
 
+#if __cplusplus > CPP14_SUPPORT
 	//////////////////////////////////////////////////////////////////////////
 	// Change keys
 	{
@@ -60,5 +66,6 @@ int main()
 
 		PRINT_MAP<Coll>(coll);
 	}
+#endif
 	return EXIT_SUCCESS;
 }
