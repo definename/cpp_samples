@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "myvector.h"
 
 using MyVector = dsvector::Vector<int>;
@@ -23,8 +24,9 @@ int main(int argc, char *argv[]) {
     v[0] = 99;
     std::cout << v[0] << std::endl;
 
-    v.insert(v.begin(), 100);
-    std::cout << v[0] << std::endl;
+    MyVector::iterator it = v.insert(v.begin(), 100);
+    assert(("Inserted equal with first", v[0] == *it));
+    std::cout << "first:" << v[0] << " inserted:" << *it << "\n";
 
     for (int i = 0; i < 11; ++i) {
         v.push_back(i);

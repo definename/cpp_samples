@@ -59,6 +59,7 @@ class Vector {
                      (size_ - index) * sizeof(T));
         *actual_it = val;
         ++size_;
+		return actual_it;
     }
 
     Vector<T>::size_type size() const {

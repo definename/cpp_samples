@@ -3,7 +3,10 @@
 set GENERATOR="%1"
 set LIBTYPE="%2"
 set CRTTYPE="%3"
-set BUILDTYPE="%4"
+set BUILDTYPE_INTERNAL="%4"
+
+if %BUILDTYPE_INTERNAL% == "" goto :error_param_buildtype
+set ARCHITECTURE_INTERNAL=""
 
 :: Determine CMake generator.
 if %GENERATOR% == "" goto :error_param_generator
@@ -18,6 +21,14 @@ if %GENERATOR% == "vc14-x86" set GENERATOR_INTERNAL="Visual Studio 14 2015"
 if %GENERATOR% == "vc14-x64" set GENERATOR_INTERNAL="Visual Studio 14 2015 Win64"
 if %GENERATOR% == "vc15-x86" set GENERATOR_INTERNAL="Visual Studio 15 2017"
 if %GENERATOR% == "vc15-x64" set GENERATOR_INTERNAL="Visual Studio 15 2017 Win64"
+if %GENERATOR% == "vc16-x86" (
+    set GENERATOR_INTERNAL="Visual Studio 16 2019"
+    set ARCHITECTURE_INTERNAL=-A Win32
+)
+if %GENERATOR% == "vc16-x64" (
+    set GENERATOR_INTERNAL="Visual Studio 16 2019"
+    set ARCHITECTURE_INTERNAL=-A x64
+)
 if %GENERATOR_INTERNAL% == "" goto :error_param_generator
 
 :: Determine library type.
@@ -33,13 +44,6 @@ set CRTTYPE_INTERNAL=""
 if %CRTTYPE% == "md" set CRTTYPE_INTERNAL="md"
 if %CRTTYPE% == "mt" set CRTTYPE_INTERNAL="mt"
 if %CRTTYPE_INTERNAL% == "" goto :error_param_crttype
-
-:: Determine build type
-if %BUILDTYPE% == "" goto :error_param_buildtype
-set BUILDTYPE_INTERNAL=""
-if %BUILDTYPE% == "debug" set BUILDTYPE_INTERNAL="debug"
-if %BUILDTYPE% == "release" set BUILDTYPE_INTERNAL="release"
-if %BUILDTYPE_INTERNAL% == "" goto :error_param_buildtype
 
 :: Check for conflicting CRT and library type.
 if %LIBTYPE_INTERNAL% == "shared" if %CRTTYPE_INTERNAL% == "mt" goto :error_crttype_conflict
@@ -57,13 +61,14 @@ if %BUILDTYPE_INTERNAL% == "release" set CMAKE_PARAMS_INTERNAL=%CMAKE_PARAMS_INT
 
 :: Create build directory.
 set BUILD_DIR=..\build\%GENERATOR%-%BUILDTYPE_INTERNAL%
-echo -- Creating build directory
+echo -- CMake build directory: %BUILD_DIR%
 mkdir %BUILD_DIR%
 pushd %BUILD_DIR%
 
 :: Run CMake.
-echo -- Running CMake with "%CMAKE_PARAMS_INTERNAL%"
-cmake -G%GENERATOR_INTERNAL% %CMAKE_PARAMS_INTERNAL% ../..
+set CMAKE_COMMAND=-G %GENERATOR_INTERNAL% %CMAKE_PARAMS_INTERNAL% %ARCHITECTURE_INTERNAL% -S ../..
+echo -- CMake command: %CMAKE_COMMAND%
+cmake %CMAKE_COMMAND%
 if errorlevel 1 goto :error_build
 
 :: Exit
@@ -72,7 +77,7 @@ popd
 goto :eof
 
 :error_param_generator
-echo ERROR: Build tool must be specified (vc10-x86, vc10-x64, vc11-x86, vc11-x64, vc12-x86, vc12-x64, vc14-x86, vc14-x64, vc15-x86, vc15-x64).
+echo ERROR: Build tool must be specified (vc10-x86,vc10-x64,vc11-*,vc12-*,vc14-*,vc15-*,vc16-*).
 exit /b 1
 
 :error_param_libtype
