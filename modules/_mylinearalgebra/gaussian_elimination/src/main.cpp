@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <iomanip>
+#include <chrono>
 
 // http://www.cleverstudents.ru/systems/solving_systems_Gauss_method.html
 // https://prog-cpp.ru/gauss/
@@ -58,6 +59,8 @@ int main(const int argc, const char* argv[]) {
             dump(x, y);
         }
 
+        std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
         for (size_t i = 0; i < x.size() - 1; ++i) {
             for (size_t j = i+1; j < x.size(); ++j) {
                 double a = -x[j][i] / x[i][i];
@@ -95,6 +98,8 @@ int main(const int argc, const char* argv[]) {
                 }
             }
         }
+        std::chrono::steady_clock::time_point stop = std::chrono::steady_clock::now();
+        std::cout << "Start/Stop difference:" << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() << std::endl;
 
         if (size <= 10) {
             std::map<int, double>::const_iterator it = x_res.begin();
