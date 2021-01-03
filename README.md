@@ -19,4 +19,5 @@
 
 # Auto-Parallelization and Auto-Vectorization
 > Auto-Parallelizer and Auto-Vectorizer are designed to provide automatic performance gains for loops in your code
-[how to](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
+
+[Manual](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
