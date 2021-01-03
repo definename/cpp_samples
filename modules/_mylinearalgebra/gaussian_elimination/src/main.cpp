@@ -36,8 +36,8 @@ void generate_matrix_01(const size_t size,
 void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
                 std::vector<double>& y,
                 std::map<int, double>& x_res) {
-    for (size_t i = 0; i < x.size() - 1; ++i) {
-        for (size_t j = i + 1; j < x.size(); ++j) {
+    for (int i = 0, imax = x.size() - 1; i < imax; ++i) {
+        for (int j = i + 1, jmax = x.size(); j < jmax; ++j) {
             double a = -x[j][i] / x[i][i];
             if (size <= 10) {
                 std::cout << "a=" << a << std::endl;
@@ -45,14 +45,11 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
 
             double tmp_y = a * y[i];
             y[j] = y[j] + tmp_y;
-
-            std::vector<double> tmp_x;
-            for (size_t t = 0; t < x[i].size(); ++t) {
-                tmp_x.push_back(x[i][t] * a);
-            }
-
-            for (size_t t = 0; t < tmp_x.size(); ++t) {
-                x[j][t] = x[j][t] + tmp_x[t];
+#pragma loop(hint_parallel(2))
+#pragma loop(ivdep)
+            for (int t = 0, tmax = x[i].size(); t < tmax; ++t) {
+                double tmp_t = x[i][t] * a;
+                x[j][t] = x[j][t] + tmp_t;
             }
         }
         if (size <= 10) {
@@ -86,6 +83,16 @@ int main(const int argc, const char* argv[]) {
             if (size <= 10) {
                 dump(x, y);
             }
+
+//             size_t size = 4;
+//             std::vector<std::vector<double>> x = {
+//                 {3,2,1,1},
+//                 {1,-1,4,-1},
+//                 {-2,-2,-3,1},
+//                 {1,5,-1,2}
+//             };
+//             std::vector<double> y = { -2,-1,9,4 };
+//             dump(x, y);
 
             std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
