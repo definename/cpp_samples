@@ -19,7 +19,7 @@
 
 # Parallel Programming in Visual C++
 
-[Auto-Parallelization and Auto-Vectorization](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
+## [Auto-Parallelization and Auto-Vectorization](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
 
 > Auto-Parallelizer and Auto-Vectorizer are designed to provide automatic performance gains for loops in your code
 
