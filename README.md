@@ -15,3 +15,7 @@
 - [leetcode](https://leetcode.com/)
 - [collabedit](http://collabedit.com/)
 - [ikmnet](https://www.ikmnet.com/)
+
+
+# Auto-Parallelization and Auto-Vectorization
+[Auto-Parallelization and Auto-Vectorization](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
