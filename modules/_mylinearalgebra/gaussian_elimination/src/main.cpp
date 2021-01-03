@@ -19,7 +19,7 @@ void dump(const std::vector<std::vector<double>>& x, const std::vector<double>& 
 
 void generate_matrix_01(const size_t size, std::vector<std::vector<double>>& x, std::vector<double>& y) {
     for (size_t i = 0; i < size; ++i) {
-        y.at(i) = i + 1;
+        y.at(i) = static_cast<int>(i) + 1;
         for (size_t j = 0; j < size; ++j) {
             if (j <= i) {
                 x.at(i).at(j) = 1;
@@ -33,80 +33,66 @@ void generate_matrix_01(const size_t size, std::vector<std::vector<double>>& x, 
 
 int main(const int argc, const char* argv[]) {
     try {
-//         std::vector<std::vector<double>> x = {
-//             {3,2,1,1},
-//             {1,-1,4,-1},
-//             {-2,-2,-3,1},
-//             {1,5,-1,2}
-// //             {2,4,1},
-// //             {5,2,1},
-// //             {2,3,4},
-//     };
+        std::vector<int> size_list({ 100,500,1000,2000,3000 });
+        for (size_t size_index = 0; size_index < size_list.size(); ++size_index) {
+            size_t size = size_list[size_index];
+            std::vector<std::vector<double>> x(size, std::vector<double>(size, 0));
+            std::vector<double> y(size, 0);
 
-//     std::vector<double> y = 
-//         { -2,-1,9,4 }
-// //        { 36, 47, 37 }
-//     ;
-
-        size_t size = 0;
-        std::cout << "Enter size:";
-        std::cin >> size;
-        std::vector<std::vector<double>> x(size, std::vector<double>(size, 0));
-        std::vector<double> y(size, 0);
-
-        generate_matrix_01(size, x, y);
-        if (size <= 10) {
-            dump(x, y);
-        }
-
-        std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-
-        for (size_t i = 0; i < x.size() - 1; ++i) {
-            for (size_t j = i+1; j < x.size(); ++j) {
-                double a = -x[j][i] / x[i][i];
-                if (size <= 10) {
-                    std::cout << "a=" << a << std::endl;
-                }
-
-                double tmp_y = a * y[i];
-                y[j] = y[j] + tmp_y;
-
-                std::vector<double> tmp_x;
-                for (size_t t = 0; t < x[i].size(); ++t) {
-                    tmp_x.push_back(x[i][t] * a);
-                }
-
-                for (size_t t = 0; t < tmp_x.size(); ++t) {
-                    x[j][t] = x[j][t] + tmp_x[t];
-                }
-            }
+            generate_matrix_01(size, x, y);
             if (size <= 10) {
                 dump(x, y);
             }
-        }
 
-        std::map<int, double> x_res;
-        for (int i = x.size() - 1; i >= 0; --i) {
-            double xi_res = y[i];
-            for (int j = x[i].size() - 1; j >= 0; --j) {
-                if (x[i][j] != 0 && x_res.count(j) == 0) {
-                    x_res[j] = xi_res / x[i][j];
-                    break;
+            std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+            for (size_t i = 0; i < x.size() - 1; ++i) {
+                for (size_t j = i + 1; j < x.size(); ++j) {
+                    double a = -x[j][i] / x[i][i];
+                    if (size <= 10) {
+                        std::cout << "a=" << a << std::endl;
+                    }
+
+                    double tmp_y = a * y[i];
+                    y[j] = y[j] + tmp_y;
+
+                    std::vector<double> tmp_x;
+                    for (size_t t = 0; t < x[i].size(); ++t) {
+                        tmp_x.push_back(x[i][t] * a);
+                    }
+
+                    for (size_t t = 0; t < tmp_x.size(); ++t) {
+                        x[j][t] = x[j][t] + tmp_x[t];
+                    }
                 }
-                else if (x_res.count(j) != 0) {
-                    xi_res += -(x[i][j] * x_res.at(j));
+                if (size <= 10) {
+                    dump(x, y);
                 }
             }
-        }
-        std::chrono::steady_clock::time_point stop = std::chrono::steady_clock::now();
-        std::cout << "Start/Stop difference:" << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() << std::endl;
 
-        if (size <= 10) {
-            std::map<int, double>::const_iterator it = x_res.begin();
-            for (it; it != x_res.end(); ++it) {
-                std::cout << "x" << it->first + 1 << "=" << it->second << " ";
+            std::map<int, double> x_res;
+            for (int i = x.size() - 1; i >= 0; --i) {
+                double xi_res = y[i];
+                for (int j = x[i].size() - 1; j >= 0; --j) {
+                    if (x[i][j] != 0 && x_res.count(j) == 0) {
+                        x_res[j] = xi_res / x[i][j];
+                        break;
+                    }
+                    else if (x_res.count(j) != 0) {
+                        xi_res += -(x[i][j] * x_res.at(j));
+                    }
+                }
             }
-            std::cout << std::endl;
+            std::chrono::steady_clock::time_point stop = std::chrono::steady_clock::now();
+            std::cout << "Time difference milliseconds:" << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() << " size:" << size << std::endl;
+
+            if (size <= 10) {
+                std::map<int, double>::const_iterator it = x_res.begin();
+                for (it; it != x_res.end(); ++it) {
+                    std::cout << "x" << it->first + 1 << "=" << it->second << " ";
+                }
+                std::cout << std::endl;
+            }
         }
         std::cout << "Done!" << std::endl;
     }
