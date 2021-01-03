@@ -17,7 +17,7 @@
 - [ikmnet](https://www.ikmnet.com/)
 
 
-# Parallel Programming in Visual C++
+# [Parallel Programming in Visual C++](https://docs.microsoft.com/en-us/cpp/parallel/parallel-programming-in-visual-cpp?view=msvc-160)
 
 ## [Auto-Parallelization and Auto-Vectorization](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
 
