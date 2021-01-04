@@ -3,6 +3,7 @@
 #include <map>
 #include <iomanip>
 #include <chrono>
+#include <intrin.h>
 
 // http://www.cleverstudents.ru/systems/solving_systems_Gauss_method.html
 
@@ -48,7 +49,7 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
             double tmp_y = a * y[i];
             y[j] = y[j] + tmp_y;
 
-            for (int t = 0, tmax = x[i].size(); t < tmax; ++t) {
+            for (int t = 0, tmax = static_cast<int>(x[i].size()); t < tmax; ++t) {
                 double tmp_t = x[i][t] * a;
                 x[j][t] = x[j][t] + tmp_t;
             }
@@ -72,8 +73,49 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
     }
 }
 
+void check_avx_support(void) {
+    bool avxSupported = false;
+
+    // If Visual Studio 2010 SP1 or later
+#if (_MSC_FULL_VER >= 160040219)
+    // Checking for AVX requires 3 things:
+    // 1) CPUID indicates that the OS uses XSAVE and XRSTORE
+    //     instructions (allowing saving YMM registers on context
+    //     switch)
+    // 2) CPUID indicates support for AVX
+    // 3) XGETBV indicates the AVX registers will be saved and
+    //     restored on context switch
+    //
+    // Note that XGETBV is only available on 686 or later CPUs, so
+    // the instruction needs to be conditionally run.
+    int cpuInfo[4];
+    __cpuid(cpuInfo, 1);
+
+    bool osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
+    bool cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
+
+    if (osUsesXSAVE_XRSTORE && cpuAVXSuport)
+    {
+        // Check if the OS will save the YMM registers
+        unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+        avxSupported = (xcrFeatureMask & 0x6) || false;
+    }
+#endif
+
+    if (avxSupported)
+    {
+        printf("AVX is supported\n");
+    }
+    else
+    {
+        printf("AVX is NOT supported\n");
+    }
+}
+
 int main(const int argc, const char* argv[]) {
     try {
+        check_avx_support();
+
         std::vector<int> size_list({ 10,100,500,1000,2000,3000 });
         for (size_t size_index = 0; size_index < size_list.size(); ++size_index) {
             size_t size = size_list[size_index];
