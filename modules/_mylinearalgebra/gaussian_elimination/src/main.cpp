@@ -37,6 +37,8 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
                 std::vector<double>& y,
                 std::map<int, double>& x_res) {
     for (int i = 0, imax = x.size() - 1; i < imax; ++i) {
+#pragma loop(hint_parallel(0))
+#pragma loop(ivdep)
         for (int j = i + 1, jmax = x.size(); j < jmax; ++j) {
             double a = -x[j][i] / x[i][i];
             if (size <= 10) {
@@ -45,8 +47,7 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
 
             double tmp_y = a * y[i];
             y[j] = y[j] + tmp_y;
-#pragma loop(hint_parallel(0))
-#pragma loop(ivdep)
+
             for (int t = 0, tmax = x[i].size(); t < tmax; ++t) {
                 double tmp_t = x[i][t] * a;
                 x[j][t] = x[j][t] + tmp_t;
