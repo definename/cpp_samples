@@ -3,8 +3,10 @@
 #include <map>
 #include <iomanip>
 #include <chrono>
+#include <intrin.h>
 
 // http://www.cleverstudents.ru/systems/solving_systems_Gauss_method.html
+// https://insufficientlycomplicated.wordpress.com/2011/11/07/detecting-intel-advanced-vector-extensions-avx-in-visual-studio/
 
 void dump(const std::vector<std::vector<double>>& x,
           const std::vector<double>& y) {
@@ -37,7 +39,9 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
                 std::vector<double>& y,
                 std::map<int, double>& x_res) {
     for (size_t i = 0; i < x.size() - 1; ++i) {
-        for (size_t j = i + 1; j < x.size(); ++j) {
+#pragma loop(hint_parallel(0))
+#pragma loop(ivdep)
+        for (int j = i + 1, jmax = x.size(); j < jmax; ++j) {
             double a = -x[j][i] / x[i][i];
             if (size <= 10) {
                 std::cout << "a=" << a << std::endl;
@@ -46,13 +50,9 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
             double tmp_y = a * y[i];
             y[j] = y[j] + tmp_y;
 
-            std::vector<double> tmp_x;
-            for (size_t t = 0; t < x[i].size(); ++t) {
-                tmp_x.push_back(x[i][t] * a);
-            }
-
-            for (size_t t = 0; t < tmp_x.size(); ++t) {
-                x[j][t] = x[j][t] + tmp_x[t];
+            for (int t = 0, tmax = x[i].size(); t < tmax; ++t) {
+                double tmp_t = x[i][t] * a;
+                x[j][t] = x[j][t] + tmp_t;
             }
         }
         if (size <= 10) {
@@ -74,8 +74,32 @@ void solve_gauss(const size_t& size, std::vector<std::vector<double>>& x,
     }
 }
 
+void check_avx_support(void) {
+    bool avxSupported = false;
+#if (_MSC_FULL_VER >= 160040219)
+    int cpuInfo[4];
+    __cpuid(cpuInfo, 1);
+
+    bool osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
+    bool cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
+
+    if (osUsesXSAVE_XRSTORE && cpuAVXSuport) {
+        unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+        avxSupported = (xcrFeatureMask & 0x6) || false;
+    }
+#endif
+    if (avxSupported) {
+        std::cout << "AVX is supported" << std::endl;
+    }
+    else {
+        std::cout << "AVX is NOT supported" << std::endl;
+    }
+}
+
 int main(const int argc, const char* argv[]) {
     try {
+        check_avx_support();
+
         std::vector<int> size_list({ 10,100,500,1000,2000,3000 });
         for (size_t size_index = 0; size_index < size_list.size(); ++size_index) {
             size_t size = size_list[size_index];
