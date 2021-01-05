@@ -17,11 +17,9 @@
 - [ikmnet](https://www.ikmnet.com/)
 
 
-# [Parallel Programming in Visual C++](https://docs.microsoft.com/en-us/cpp/parallel/parallel-programming-in-visual-cpp?view=msvc-160)
+#/Q options
 
-## [Auto-Parallelization and Auto-Vectorization](https://docs.microsoft.com/en-us/cpp/parallel/auto-parallelization-and-auto-vectorization?view=msvc-160)
-
-> Auto-Parallelizer and Auto-Vectorizer are designed to provide automatic performance gains for loops in your code
+[/Q Options](https://docs.microsoft.com/en-us/cpp/build/reference/q-options-low-level-operations?view=msvc-160) - use to perform low-level compiler operations
 
 How to enable and check possible places to optimize:
 
@@ -29,5 +27,3 @@ How to enable and check possible places to optimize:
 /Qpar /Qpar-report:2
 /Qvec-report:2
 ```
-
-[/Q Options](https://docs.microsoft.com/en-us/cpp/build/reference/q-options-low-level-operations?view=msvc-160) - use to perform low-level compiler operations
