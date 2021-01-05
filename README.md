@@ -17,7 +17,7 @@
 - [ikmnet](https://www.ikmnet.com/)
 
 
-#/Q options
+# /Q options
 
 [/Q Options](https://docs.microsoft.com/en-us/cpp/build/reference/q-options-low-level-operations?view=msvc-160) - use to perform low-level compiler operations
 
