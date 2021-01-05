@@ -30,4 +30,4 @@ How to enable and check possible places to optimize:
 /Qvec-report:2
 ```
 
-[/Q Options](https://docs.microsoft.com/en-us/cpp/build/reference/q-options-low-level-operations?view=msvc-160) - use to perform the following low-level compiler operations
+[/Q Options](https://docs.microsoft.com/en-us/cpp/build/reference/q-options-low-level-operations?view=msvc-160) - use to perform low-level compiler operations
