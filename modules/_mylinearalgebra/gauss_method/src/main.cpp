@@ -1,4 +1,4 @@
-#define _CRTDBG_MAP_ALLOC
+ #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #ifdef _DEBUG
     #define MYDEBUG_NEW new( _NORMAL_BLOCK, __FILE__, __LINE__)
@@ -10,8 +10,26 @@
 #include <iomanip>
 #include <chrono>
 #include <random>
+#include <intrin.h>
 
 using data_t = float;
+
+bool do_test_avx_support() {
+    bool avxSupported = false;
+#if (_MSC_FULL_VER >= 160040219)
+    int cpuInfo[4];
+    __cpuid(cpuInfo, 1);
+
+    bool osUsesXSAVE_XRSTORE = cpuInfo[2] & (1 << 27) || false;
+    bool cpuAVXSuport = cpuInfo[2] & (1 << 28) || false;
+
+    if (osUsesXSAVE_XRSTORE && cpuAVXSuport) {
+        unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
+        avxSupported = (xcrFeatureMask & 0x6) || false;
+    }
+#endif
+    return avxSupported;
+}
 
 void do_print_results(const size_t& size, data_t** m, const data_t* v, const data_t* m_res) {
     if (size <= 10) {
@@ -82,7 +100,8 @@ data_t* do_gauss(const int& size, data_t** m, data_t* v) {
             v[i] = v[max_i];
             v[max_i] = tmp_y;
         }
-
+#pragma loop(hint_parallel(0))
+#pragma loop(ivdep)
         for (int j = i + 1, jmax = size; j < jmax; ++j) {
             data_t a = -m[j][i] / m[i][i];
 
@@ -108,6 +127,7 @@ data_t* do_gauss(const int& size, data_t** m, data_t* v) {
     for (int i = 0; i < size; ++i) {
         res_check[i] = 0;
     }
+
     for (int i = size - 1; i >= 0; --i) {
         data_t xi_res = v[i];
         for (int j = size - 1; j >= 0; --j) {
@@ -128,6 +148,8 @@ data_t* do_gauss(const int& size, data_t** m, data_t* v) {
 int main(const int argc, const char* argv[]) {
     int ret = EXIT_SUCCESS;
     try {
+        std::cout << (do_test_avx_support() ? "AVX support OK" : "AVX support NOK") << std::endl;
+
         int test_list[] = { 10,100,1000,2000,3000,4000 };
         for (size_t i = 0; i < sizeof(test_list) / sizeof(test_list[0]); ++i) {
             size_t size = test_list[i];
