@@ -1,1 +1,1 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/gaussian_elimination)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/gauss_method)
