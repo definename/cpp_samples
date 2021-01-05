@@ -1,3 +1,10 @@
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#ifdef _DEBUG
+    #define MYDEBUG_NEW new( _NORMAL_BLOCK, __FILE__, __LINE__)
+    #define new MYDEBUG_NEW
+#endif
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -8,141 +15,301 @@
 
 // http://www.cleverstudents.ru/systems/solving_systems_Gauss_method.html
 
-void print_results(const std::vector<std::vector<float>>& x,
-                   const std::vector<float>& y,
-                   const std::map<int, float>& x_res) {
-    if (x.size() <= 10 && y.size() <= 10) {
-        std::map<int, float>::const_iterator it = x_res.begin();
-        for (it; it != x_res.end(); ++it) {
-            std::cout << "x" << it->first << "=" << it->second << " ";
+using data_t = float;
+
+/* C implementation *************************************************************************/
+
+void do_print_results(const size_t& size, data_t** m, const data_t* v, const data_t* m_res) {
+    if (size <= 10 && size <= 10) {
+        for (int i = 0; i < size; ++i) {
+            std::cout << "x" << i << "=" << m_res[i] << " ";
         }
         std::cout << std::endl;
 
-        for (int i = 0, imax = x.size(); i < imax; ++i) {
+        for (size_t i = 0; i < size; ++i) {
             float calc = 0;
-            for (int j = 0, jmax = x[i].size(); j < jmax; ++j) {
-                calc += (x[i][j] * x_res.at(j));
+            for (size_t j = 0; j < size; ++j) {
+                calc += (m[i][j] * m_res[j]);
             }
-            std::cout << i << " calc:" << std::setw(8) << calc << " origin:" << std::setw(8) << y[i] << std::endl;
+            std::cout << i << " calc:" << std::setw(8) << calc << " origin:" << std::setw(8) << v[i] << std::endl;
         }
     }
 }
 
-void dump(const std::vector<std::vector<float>>& x,
-          const std::vector<float>& y) {
-    if (x.size() <= 10 && y.size() <= 10) {
+void do_print_matrix(const size_t& size, data_t** m, data_t* v) {
+    if (size <= 10) {
         const int setw_size = 6;
         const int setprecision_size = 2;
-        for (size_t i = 0; i < x.size(); ++i) {
-            for (size_t j = 0; j < x.size(); ++j) {
-                std::cout << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << x[i][j] << " ";
+        for (size_t i = 0; i < size; ++i) {
+            for (size_t j = 0; j < size; ++j) {
+                std::cout << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << m[i][j] << " ";
             }
-            std::cout << "= " << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << y[i] << std::endl;
+            std::cout << "= " << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << v[i] << std::endl;
         }
         std::cout << std::endl;
     }
 }
 
-void generate_random_matrix(const size_t size,
-                        std::vector<std::vector<float>>& x,
-                        std::vector<float>& y) {
+void do_generate_random_matrix(const size_t& size, data_t** m, data_t* v) {
 
     unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
     std::default_random_engine random_engine(seed);
     std::uniform_int_distribution<int> distribution(-9, 9);
 
     for (size_t i = 0; i < size; ++i) {
-        y[i] = static_cast<float>(distribution(random_engine));
+        v[i] = static_cast<float>(distribution(random_engine));
         for (size_t j = 0; j < size; ++j) {
-            x[i][j] = static_cast<float>(distribution(random_engine));
+            m[i][j] = static_cast<float>(distribution(random_engine));
         }
     }
 }
 
-void do_gauss(std::vector<std::vector<float>>& x,
-              std::vector<float>& y,
-              std::map<int, float>& x_res) {
-    for (int i = 0, imax = x.size() - 1; i < imax; ++i) {
+data_t* do_gauss(const size_t size, data_t** m, data_t* v) {
+    for (int i = 0, imax = size - 1; i < imax; ++i) {
 
-        float max_x = abs(x[i][i]);
+        data_t max_x = abs(m[i][i]);
         int max_i = i;
-        for (int moved_i = i + 1, moved_imax = x.size(); moved_i < moved_imax; ++moved_i) {
-            if (max_x < abs(x[moved_i][i])) {
-                max_x = abs(x[moved_i][i]);
+        for (size_t moved_i = i + 1; moved_i < size; ++moved_i) {
+            if (max_x < abs(m[moved_i][i])) {
+                max_x = abs(m[moved_i][i]);
                 max_i = moved_i;
             }
         }
 
         if (max_i != i) {
-            std::vector<float> tmp_x = x[i];
-            x[i] = x[max_i];
-            x[max_i] = tmp_x;
+            data_t* tmp_x = m[i];
+            m[i] = m[max_i];
+            m[max_i] = tmp_x;
 
-            float tmp_y = y[i];
-            y[i] = y[max_i];
-            y[max_i] = tmp_y;
+            data_t tmp_y = v[i];
+            v[i] = v[max_i];
+            v[max_i] = tmp_y;
         }
 
 #pragma loop(hint_parallel(0))
 #pragma loop(ivdep)
-        for (int j = i + 1, jmax = x.size(); j < jmax; ++j) {
-            float a = -x[j][i] / x[i][i];
+        for (int j = i + 1, jmax = size; j < jmax; ++j) {
+            data_t a = -m[j][i] / m[i][i];
 
-            float tmp_y = a * y[i];
-            y[j] = y[j] + tmp_y;
+            data_t tmp_y = a * v[i];
+            v[j] = v[j] + tmp_y;
 
-            for (int t = 0, tmax = x[i].size(); t < tmax; ++t) {
-                float tmp_t = x[i][t] * a;
-                x[j][t] = x[j][t] + tmp_t;
+            data_t* tmp_arr = new data_t[size];
+            for (int t = 0, tmax = size; t < tmax; ++t) {
+                data_t tmp_t = m[i][t] * a;
+                tmp_arr[t] = tmp_t;
             }
+            for (int t = 0, tmax = size; t < tmax; ++t) {
+                data_t tmp_t = tmp_arr[t];
+                m[j][t] = m[j][t] + tmp_t;
+            }
+            delete[] tmp_arr;
         }
-        dump(x, y);
+        do_print_matrix(size, m, v);
     }
 
-    for (int i = x.size() - 1; i >= 0; --i) {
-        float xi_res = y[i];
-        for (int j = x[i].size() - 1; j >= 0; --j) {
-            if (x[i][j] != 0 && x_res.count(j) == 0) {
-                x_res[j] = xi_res / x[i][j];
+    data_t* m_res = new data_t[size];
+    int* res_check = new int[size];
+    for (int i = 0; i < size; ++i) {
+        res_check[i] = 0;
+    }
+    for (int i = size - 1; i >= 0; --i) {
+        data_t xi_res = v[i];
+        for (int j = size - 1; j >= 0; --j) {
+            if (m[i][j] != 0 && res_check[j] == 0) {
+                m_res[j] = xi_res / m[i][j];
+                res_check[j] = 1;
                 break;
             }
-            else if (x_res.count(j) != 0) {
-                xi_res += -(x[i][j] * x_res.at(j));
+            else if (res_check[j] != 0) {
+                xi_res += -(m[i][j] * m_res[j]);
+            }
+        }
+    }
+    delete[] res_check;
+    return m_res;
+}
+
+/* CPP implementation *************************************************************************/
+
+using vector_t = std::vector<data_t>;
+using matrix_t = std::vector<vector_t>;
+using map_t = std::map<int, data_t>;
+
+void do_print_results(const matrix_t& m, const vector_t& v, const map_t& m_res) {
+    if (m.size() <= 10 && v.size() <= 10) {
+        for (map_t::const_iterator it = m_res.begin(); it != m_res.end(); ++it) {
+            std::cout << "x" << it->first << "=" << it->second << " ";
+        }
+        std::cout << std::endl;
+
+        for (size_t i = 0; i < m.size(); ++i) {
+            float calc = 0;
+            for (size_t j = 0; j < m[i].size(); ++j) {
+                calc += (m[i][j] * m_res.at(j));
+            }
+            std::cout << i << " calc:" << std::setw(8) << calc << " origin:" << std::setw(8) << v[i] << std::endl;
+        }
+    }
+}
+
+void do_print_matrix(const matrix_t& m, const vector_t& v) {
+    if (m.size() <= 10 && v.size() <= 10) {
+        const int setw_size = 6;
+        const int setprecision_size = 2;
+        for (size_t i = 0; i < m.size(); ++i) {
+            for (size_t j = 0; j < m.size(); ++j) {
+                std::cout << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << m[i][j] << " ";
+            }
+            std::cout << "= " << std::setw(setw_size) << std::setprecision(setprecision_size) << std::fixed << v[i] << std::endl;
+        }
+        std::cout << std::endl;
+    }
+}
+
+void do_generate_random_matrix(const size_t& size, matrix_t& m, vector_t& v) {
+
+    unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
+    std::default_random_engine random_engine(seed);
+    std::uniform_int_distribution<int> distribution(-9, 9);
+
+    for (size_t i = 0; i < size; ++i) {
+        v[i] = static_cast<float>(distribution(random_engine));
+        for (size_t j = 0; j < size; ++j) {
+            m[i][j] = static_cast<float>(distribution(random_engine));
+        }
+    }
+}
+
+void do_gauss(matrix_t& m, vector_t& v, map_t& m_res) {
+    for (int i = 0, imax = m.size() - 1; i < imax; ++i) {
+
+        data_t max_x = abs(m[i][i]);
+        int max_i = i;
+        for (size_t moved_i = i + 1; moved_i < m.size(); ++moved_i) {
+            if (max_x < abs(m[moved_i][i])) {
+                max_x = abs(m[moved_i][i]);
+                max_i = moved_i;
+            }
+        }
+
+        if (max_i != i) {
+            vector_t tmp_x = m[i];
+            m[i] = m[max_i];
+            m[max_i] = tmp_x;
+
+            data_t tmp_y = v[i];
+            v[i] = v[max_i];
+            v[max_i] = tmp_y;
+        }
+
+#pragma loop(hint_parallel(0))
+#pragma loop(ivdep)
+        for (int j = i + 1, jmax = m.size(); j < jmax; ++j) {
+            data_t a = -m[j][i] / m[i][i];
+
+            data_t tmp_y = a * v[i];
+            v[j] = v[j] + tmp_y;
+
+            for (int t = 0, tmax = m[i].size(); t < tmax; ++t) {
+                data_t tmp_t = m[i][t] * a;
+                m[j][t] = m[j][t] + tmp_t;
+            }
+        }
+        do_print_matrix(m, v);
+    }
+
+    for (int i = m.size() - 1; i >= 0; --i) {
+        data_t xi_res = v[i];
+        for (int j = m[i].size() - 1; j >= 0; --j) {
+            if (m[i][j] != 0 && m_res.count(j) == 0) {
+                m_res[j] = xi_res / m[i][j];
+                break;
+            }
+            else if (m_res.count(j) != 0) {
+                xi_res += -(m[i][j] * m_res.at(j));
             }
         }
     }
 }
 
 int main(const int argc, const char* argv[]) {
+    int ret = EXIT_SUCCESS;
     try {
-        for (size_t size_index = 0; size_index < 1; ++size_index) {
-            size_t size = 10;
-            std::vector<std::vector<float>> x(size, std::vector<float>(size, 0));
-            std::vector<float> y(size, 0);
+        int test_list[] = { 10};
+/*        int test_list[] = { 10,100,1000,2000,3000,4000 };*/
+        for (size_t i = 0; i < sizeof(test_list) / sizeof(test_list[0]); ++i) {
+            size_t size = test_list[i];
 
-            generate_random_matrix(size, x, y);
-            dump(x, y);
+            /* C implementation **********************************************/
+            data_t** mm = new data_t*[size];
+            data_t** mm_totest = new data_t*[size];
+            for (int j = 0; j < size; ++j) {
+                mm[j] = new data_t[size];
+                mm_totest[j] = new data_t[size];
+            }
+            data_t* vv = new data_t[size];
+            data_t* vv_totest = new data_t[size];
 
-            std::vector < std::vector<float >> backup_x = x;
-            std::vector<float> backup_y = y;
+            do_generate_random_matrix(size, mm, vv);
+
+            for (int j = 0; j < size; ++j) {
+                vv_totest[j] = vv[j];
+                for (int y = 0; y < size; ++y) {
+                    mm_totest[j][y] = mm[j][y];
+                }
+            }
+            do_print_matrix(size, mm, vv);
 
             std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-
-            std::map<int, float> x_res;
-            do_gauss(x, y, x_res);
+            
+            data_t* mm_res = do_gauss(size, mm, vv);
 
             std::chrono::steady_clock::time_point stop = std::chrono::steady_clock::now();
             std::chrono::milliseconds dur = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-            std::cout << "milliseconds:" << dur.count() << " matrix size:" << size << std::endl;
+            std::cout << "milliseconds:" << std::setw(10) << dur.count() << " matrix size:" << std::setw(10) << size << std::endl;
 
-            print_results(backup_x, backup_y, x_res);
+            do_print_results(size, mm_totest, vv_totest, mm_res);
+
+            for (int j = 0; j < size; ++j) {
+                delete[] mm[j];
+                delete[] mm_totest[j];
+            }
+            delete[] mm;
+            delete[] mm_totest;
+            delete[] vv;
+            delete[] vv_totest;
+            delete[] mm_res;
+
+            /* CPP implementation **********************************************/
+
+//             matrix_t m(size, vector_t(size, 0));
+//             vector_t v(size, 0);
+// 
+//             do_generate_random_matrix(size, m, v);
+//             do_print_matrix(m, v);
+// 
+//             matrix_t backup_m = m;
+//             vector_t backup_v = v;
+// 
+//             std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+// 
+//             std::map<int, float> m_res;
+//             do_gauss(m, v, m_res);
+// 
+//             std::chrono::steady_clock::time_point stop = std::chrono::steady_clock::now();
+//             std::chrono::milliseconds dur = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+//             std::cout << "milliseconds:" << std::setw(10) << dur.count() << " matrix size:" << std::setw(10) << size << std::endl;
+// 
+//             do_print_results(backup_m, backup_v, m_res);
         }
     }
     catch (const std::exception& e) {
         std::cerr << "Error occurred:" << e.what() << std::endl;
-        return EXIT_FAILURE;
+        ret = EXIT_FAILURE;
     }
-    return EXIT_SUCCESS;
+    _CrtDumpMemoryLeaks();
+    return ret;
 }
 
 
