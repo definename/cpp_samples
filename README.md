@@ -27,5 +27,5 @@ How to enable and check possible places to optimize:
 
 ```
 /Qpar /Qpar-report:2
-/Qvec /Qvec-report:2
+/Qvec-report:2
 ```
