@@ -9,7 +9,7 @@ public:
 	virtual ~WindowMenu() {
 		std::cout << "WindowMenu has been destroyed" << std::endl;
 	}
-	virtual void Draw() override {
+	void Draw() override {
 		std::cout << "Window menu has been drown" << std::endl;
 	}
 };
