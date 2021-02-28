@@ -1,4 +1,4 @@
-.PHONY: all clean docs
+.PHONY: all clean
 
 BUILD_DIR = ../build
 
