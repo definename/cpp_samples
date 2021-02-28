@@ -72,6 +72,7 @@ int main(int argc, char* argv[])
 	}
 
 	{
+		std::cout << "................" << std::endl;
 		unsigned char i = 300;
 		// unsigned char i will have value 44
 		assert(i == 44);
@@ -81,5 +82,12 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	{
+		std::cout << "................" << std::endl;
+		char arr[] = "0123456789abcd";
+		uint32_t c = 0x55555555;
+		*((uint32_t*)arr + 1) = c;
+		std::cout << arr << std::endl;
+	}
 	return 0;
 }
