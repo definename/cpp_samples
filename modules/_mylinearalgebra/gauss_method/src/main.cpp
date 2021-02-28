@@ -1,16 +1,19 @@
- #define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#ifdef _DEBUG
-    #define MYDEBUG_NEW new( _NORMAL_BLOCK, __FILE__, __LINE__)
-    #define new MYDEBUG_NEW
-#endif
+#ifdef WIN32
+    #define _CRTDBG_MAP_ALLOC
+    #include <crtdbg.h>
+    #ifdef _DEBUG
+        #define MYDEBUG_NEW new( _NORMAL_BLOCK, __FILE__, __LINE__)
+        #define new MYDEBUG_NEW
+    #endif // _DEBUG
+
+    #include <intrin.h>
+#endif // WIN32
 
 #include <iostream>
 #include <map>
 #include <iomanip>
 #include <chrono>
 #include <random>
-#include <intrin.h>
 
 using data_t = float;
 
@@ -200,6 +203,8 @@ int main(const int argc, const char* argv[]) {
         std::cerr << "Error:" << e.what() << std::endl;
         ret = EXIT_FAILURE;
     }
+#ifdef WIN32
     _CrtDumpMemoryLeaks();
+#endif
     return ret;
 }

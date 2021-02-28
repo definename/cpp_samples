@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.10)
 project(cpp_samples)
 
 # Where to put all the ARCHIVE targets when built.
@@ -5,7 +6,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Where to put all the RUNTIME target files when built.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-if (UNIX)
+if(UNIX)
 	# Set C++ standard features
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 	set(CMAKE_CXX_STANDARD 11)
