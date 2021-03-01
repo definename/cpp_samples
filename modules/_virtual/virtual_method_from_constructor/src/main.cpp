@@ -5,27 +5,32 @@ class A {
 	A() {
 		run();
 	}
-	~A() {
+	virtual ~A() {
 		run();
 	}
-	virtual void run() const {
-		std::cout << "A" << std::endl;
-	}
+	virtual void run() = 0;
 };
+
+void A::run() {
+	std::cout << "A" << std::endl;
+}
 
 class B: public A {
 	public:
 	B() = default;
-	~B() = default;
+	~B() {
+		std::cout << "B destroyed" << std::endl;
+	};
 
-	void run() const override {
+	void run() override {
+		A::run();
 		std::cout << "WILL NEVER BE CALLED" << std::endl;
 	}
 };
 
 int main(int argc, char* argv[]) {
-	B d;
-	B *dd = new B();
-	delete dd;
+	B bb;
+	A *aa = new B();
+	delete aa;
 	return EXIT_SUCCESS;
 }
