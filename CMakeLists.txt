@@ -105,7 +105,7 @@ add_subdirectory(modules/_mylinearalgebra)
 # add_subdirectory(modules/_stl_re-implementation)
 
 # add_subdirectory(modules/base_conversion)
-# add_subdirectory(modules/dynamic_cast)
+add_subdirectory(modules/dynamic_cast)
 # add_subdirectory(modules/atexit)
 # add_subdirectory(modules/assert)
 # add_subdirectory(modules/atomic)
