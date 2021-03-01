@@ -89,5 +89,11 @@ int main(int argc, char* argv[])
 		*((uint32_t*)arr + 1) = c;
 		std::cout << arr << std::endl;
 	}
+
+	{
+		int data = 3;
+		std::cout << (data += 1);
+	}
+
 	return 0;
 }
